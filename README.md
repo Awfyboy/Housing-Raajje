@@ -1,4 +1,4 @@
-# Sysdev project - Tropica
+# Distribution & Enterprise - Housing 4 Raajje
 A simple tourism island project developed for the System Development Group Project.<br>
 Developed by Awf, Naaih and Hisan.
 
@@ -38,6 +38,7 @@ You will notice that __APP_KEY__ in __".env"__ is empty. We need to generate the
 ```bash
 docker-compose up -d --build
 docker-compose exec app bash
+composer install
 php artisan key:generate
 ```
 
