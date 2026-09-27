@@ -4,7 +4,7 @@ Developed by Awf, Naaih, Midhuha and Hisan.
 
 ### Stack
 - Docker
-- Laravel 13.17.0
+- Laravel 13.33.0
 - PHP 8.5
 - MySQL 8.0
 - Bootstrap
@@ -42,7 +42,7 @@ composer install
 php artisan key:generate
 ```
 
-This will build/rebuild your docker containers and also generate the __APP_KEY__ necessary for development in local environment. Finally let's make migrations and generate seeders. We do this whenever the database structure changes, like when we add in a model. You will also need to do this on initial setup.
+This will build/rebuild your docker containers and also generate the __APP_KEY__ necessary for development in local environment. Finally let's make migrations and generate seeders. We do this whenever the database structure changes, like when we add a new model. You will also need to do this on initial setup.
 
 ```bash
 php artisan migrate:fresh --seed
