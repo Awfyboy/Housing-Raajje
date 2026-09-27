@@ -59,6 +59,10 @@ These are common commands you would use during the development of the project. T
 # Only needs to be run on initial cloning or when dependencies change
 docker-compose up -d --build
 
+# turns the docker containers off
+# you will need to type the code above to turn it on again
+docker-compose down
+
 # prints all containers that are running
 # you should see 3 containers (housing-raajje; mysql; phpmyadmin)
 docker ps
@@ -92,7 +96,7 @@ git pull origin <branch-name>
 ---
 
 ## Common Docker-Compose Commands
-These commands should be run in the Docker-Compose bash *(NOT CMD)*. When you enter the Docker bash, your terminal will show 'root@some-id:/var/www/html#' instead of your project directory. This is where you type the php artisan commands below. You can type 'exit' to go back to your terminal (whether it is CMD/bash/powershell)
+These commands should be run in the Docker-Compose bash *(NOT CMD)*. When you enter the Docker bash, your terminal will show *'root@some-id:/var/www/html#'* instead of your project directory. This is where you type the php artisan commands below. You can type *'exit'* to go back to your terminal (whether it is CMD/bash/powershell)
 ```bash
 # generate APP KEY for local environment
 # only run when you first clone the project or if .env file is missing APP_KEY
