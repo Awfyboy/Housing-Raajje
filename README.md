@@ -103,11 +103,11 @@ These commands should be run in the Docker-Compose bash *(NOT CMD)*. When you en
 php artisan key:generate
 
 # migrate any changes when a model is added
-# good to run when testing a new branch, or if a branch has changes made
+# good to run when testing a new branch, or if a branch has new changes
 php artisan migrate:fresh --seed
 
 # rollback migrations
-# good to run after testing a branch with different models and switching back to a different branch.
+# good to run after testing a branch with different models and switching back to a previous branch.
 php artisan migrate:rollback
 
 # exit and return to your original terminal
