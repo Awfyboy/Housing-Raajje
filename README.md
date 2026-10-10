@@ -110,6 +110,13 @@ php artisan migrate:fresh --seed
 # good to run after testing a branch with different models and switching back to a previous branch.
 php artisan migrate:rollback
 
+# used for clearing the views 
+# useful if you get errors while jumping to a new page, good to use after adding new views/pages
+php artisan view:clear
+
+# helps making the page load faster if you added new pages
+php artisan optimize:clear
+
 # exit and return to your original terminal
 exit
 
