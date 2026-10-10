@@ -6,20 +6,30 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('viewings', function (Blueprint $table) {
             $table->id();
+
+            $table->foreignId('application_id')
+                ->constrained('applications')
+                ->cascadeOnDelete();
+
+            $table->foreignId('scheduled_by')
+                ->nullable()
+                ->constrained('users')
+                ->nullOnDelete();
+
+            $table->dateTime('scheduled_at');
+            $table->string('status')->default('scheduled')->index();
+            $table->text('notes')->nullable();
+
             $table->timestamps();
+
+            $table->index(['scheduled_at', 'status']);
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::dropIfExists('viewings');

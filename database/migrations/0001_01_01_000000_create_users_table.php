@@ -6,17 +6,27 @@ use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
+
+            // Basic account information
             $table->string('name');
             $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('phone')->nullable();
             $table->string('password');
+
+            // Account permissions and status
+            $table->string('role')->index();
+            $table->string('status')->default('active');
+            $table->boolean('mfa_enabled')->default(false);
+
+            // Branch assignment (for employees)
+            $table->unsignedBigInteger('branch_id')->nullable();
+
+            // Laravel authentication fields
+            $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });
@@ -37,13 +47,10 @@ return new class extends Migration
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
-        Schema::dropIfExists('users');
-        Schema::dropIfExists('password_reset_tokens');
         Schema::dropIfExists('sessions');
+        Schema::dropIfExists('password_reset_tokens');
+        Schema::dropIfExists('users');
     }
 };
