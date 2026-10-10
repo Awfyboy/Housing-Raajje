@@ -15,6 +15,11 @@ return new class extends Migration
                 ->constrained('owners')
                 ->cascadeOnDelete();
 
+            $table->foreignId('branch_id')
+                ->nullable()
+                ->constrained('branches')
+                ->nullOnDelete();
+
             $table->string('title');
             $table->text('description')->nullable();
             $table->string('address');

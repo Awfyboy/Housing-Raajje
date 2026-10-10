@@ -15,6 +15,8 @@ use Database\Factories\UserFactory;
 use App\Models\Entity\Message;
 use App\Models\Entity\MaintenanceRequest;
 use App\Models\Entity\AuditLog;
+use App\Models\Entity\Viewing;
+use App\Models\Entity\Payment;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -103,5 +105,15 @@ class User extends Authenticatable
     public function auditLogs(): HasMany
     {
         return $this->hasMany(AuditLog::class, 'actor_id');
+    }
+
+    public function scheduledViewings(): HasMany
+    {
+        return $this->hasMany(Viewing::class, 'scheduled_by');
+    }
+
+    public function recordedPayments(): HasMany
+    {
+        return $this->hasMany(Payment::class, 'recorded_by');
     }
 }

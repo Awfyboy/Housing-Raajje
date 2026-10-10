@@ -33,7 +33,7 @@ return new class extends Migration
                 ->unique()
                 ->nullable()
                 ->constrained('applications')
-                ->nullOnDelete();
+                ->restrictOnDelete();
 
             $table->date('start_date');
             $table->date('end_date');

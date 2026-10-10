@@ -1,3 +1,4 @@
+
 <?php
 
 namespace App\Models\Entity;
@@ -15,6 +16,7 @@ class Property extends Model
 
     protected $fillable = [
         'owner_id',
+        'branch_id',
         'title',
         'description',
         'address',
@@ -40,11 +42,16 @@ class Property extends Model
         return $this->belongsTo(Owner::class);
     }
 
+    public function branch(): BelongsTo
+    {
+        return $this->belongsTo(Branch::class);
+    }
+
     public function registrations(): HasMany
     {
         return $this->hasMany(PropertyRegistration::class);
     }
-    
+
     public function applications(): HasMany
     {
         return $this->hasMany(Application::class);
