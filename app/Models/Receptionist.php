@@ -8,6 +8,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Receptionist extends Model
 {
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_ON_LEAVE = 'on_leave';
+    public const STATUS_INACTIVE = 'inactive';
+
     protected $fillable = [
         'user_id',
         'employee_number',
