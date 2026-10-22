@@ -59,6 +59,9 @@ These are common commands you would use during the development of the project. T
 # Only needs to be run on initial cloning or when dependencies change
 docker-compose up -d --build
 
+# turns the docker containers on (without rebuilding)
+docker-compose up
+
 # turns the docker containers off
 # you will need to type the code above to turn it on again
 docker-compose down
@@ -109,6 +112,10 @@ php artisan migrate:fresh --seed
 # rollback migrations
 # good to run after testing a branch with different models and switching back to a previous branch.
 php artisan migrate:rollback
+
+# check the status of all migrations
+# useful if you have added a new migration to update the database
+php artisan migrate:status
 
 # used for clearing the views 
 # useful if you get errors while jumping to a new page, good to use after adding new views/pages
