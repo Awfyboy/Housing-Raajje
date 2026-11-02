@@ -55,18 +55,6 @@
                    name="password_confirmation" required>
         </div>
 
-        <div class="form-check mb-4">
-            <input class="form-check-input @error('terms') is-invalid @enderror"
-                   type="checkbox" name="terms" id="terms" {{ old('terms') ? 'checked' : '' }} required>
-            <label class="form-check-label small" for="terms">
-                I agree to the <a href="#" class="text-decoration-none">Terms of Service</a>
-                and <a href="#" class="text-decoration-none">Privacy Policy</a>.
-            </label>
-            @error('terms')
-                <div class="invalid-feedback">{{ $message }}</div>
-            @enderror
-        </div>
-
         <button type="submit" class="btn btn-hr w-100">Create Account</button>
 
         <p class="text-center text-muted small mt-4 mb-0">
