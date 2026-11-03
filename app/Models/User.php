@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Contracts\Auth\MustVerifyEmail;  // uncomment
 use App\Enums\UserRoles;
+use App\Models\Entity\Admin;  
 use App\Models\Entity\Branch;
 use App\Models\Entity\BranchManager;
 use App\Models\Entity\Client;

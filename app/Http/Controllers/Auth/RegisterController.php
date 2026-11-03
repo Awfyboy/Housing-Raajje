@@ -30,6 +30,7 @@ class RegisterController extends Controller
             'email'    => $data['email'],
             'password' => $data['password'],   // should be hashed
             'role'     => UserRoles::CLIENT,
+            'mfa_enabled' => true // extra fix
         ]);
 
         event(new Registered($user));
