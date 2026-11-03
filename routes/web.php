@@ -54,10 +54,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
 });
 
 // Portals (Public for now)
-Route::view('/client',            'client.home')->name('client.home');
+//clients
+Route::view('/client/home', 'client.home')->name('client.home');
 Route::view('/client/properties', 'client.properties.index')->name('client.properties');
-Route::view('/owner', 'owner.dashboard')->name('owner.dashboard');
-Route::view('/admin', 'admin.dashboard')->name('admin.dashboard');
+//owner
+Route::view('/owner/dashboard', 'owner.dashboard')->name('owner.dashboard');
+//admin
+Route::view('/admin/dashboard', 'admin.dashboard')->name('admin.dashboard');
 
 //auth protected later
 /*
