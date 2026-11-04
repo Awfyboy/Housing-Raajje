@@ -54,18 +54,24 @@ class DatabaseSeeder extends Seeder
                 'email' => 'admin1@housing4raajje.mv',
                 'phone' => '7000001',
                 'role' => UserRoles::ADMIN,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Admin Two',
                 'email' => 'admin2@housing4raajje.mv',
                 'phone' => '7000002',
                 'role' => UserRoles::ADMIN,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Admin Three',
                 'email' => 'admin3@housing4raajje.mv',
                 'phone' => '7000003',
                 'role' => UserRoles::ADMIN,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
 
             // Branch Managers: one per branch.
@@ -75,6 +81,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000004',
                 'role' => UserRoles::BRANCH_MANAGER,
                 'branch_id' => BranchLocations::MALE,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Branch Manager Two',
@@ -82,6 +90,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000005',
                 'role' => UserRoles::BRANCH_MANAGER,
                 'branch_id' => BranchLocations::VILLINGILI,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Branch Manager Three',
@@ -89,6 +99,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000006',
                 'role' => UserRoles::BRANCH_MANAGER,
                 'branch_id' => BranchLocations::HULHUMALE,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
 
             // Staff: one per branch.
@@ -98,6 +110,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000007',
                 'role' => UserRoles::STAFF,
                 'branch_id' => BranchLocations::MALE,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Staff Two',
@@ -105,6 +119,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000008',
                 'role' => UserRoles::STAFF,
                 'branch_id' => BranchLocations::VILLINGILI,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Staff Three',
@@ -112,6 +128,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000009',
                 'role' => UserRoles::STAFF,
                 'branch_id' => BranchLocations::HULHUMALE,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
 
             // Receptionists: one per branch.
@@ -121,6 +139,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000010',
                 'role' => UserRoles::RECEPTIONIST,
                 'branch_id' => BranchLocations::MALE,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Receptionist Two',
@@ -128,6 +148,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000011',
                 'role' => UserRoles::RECEPTIONIST,
                 'branch_id' => BranchLocations::VILLINGILI,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Receptionist Three',
@@ -135,6 +157,8 @@ class DatabaseSeeder extends Seeder
                 'phone' => '7000012',
                 'role' => UserRoles::RECEPTIONIST,
                 'branch_id' => BranchLocations::HULHUMALE,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
 
             // Property Owners: no branch assignment.
@@ -143,18 +167,24 @@ class DatabaseSeeder extends Seeder
                 'email' => 'owner1@housing4raajje.mv',
                 'phone' => '7000013',
                 'role' => UserRoles::PROPERTY_OWNER,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Property Owner Two',
                 'email' => 'owner2@housing4raajje.mv',
                 'phone' => '7000014',
                 'role' => UserRoles::PROPERTY_OWNER,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Property Owner Three',
                 'email' => 'owner3@housing4raajje.mv',
                 'phone' => '7000015',
                 'role' => UserRoles::PROPERTY_OWNER,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
 
             // Clients: no branch assignment.
@@ -163,18 +193,24 @@ class DatabaseSeeder extends Seeder
                 'email' => 'client1@housing4raajje.mv',
                 'phone' => '7000016',
                 'role' => UserRoles::CLIENT,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Client Two',
                 'email' => 'client2@housing4raajje.mv',
                 'phone' => '7000017',
                 'role' => UserRoles::CLIENT,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
             [
                 'name' => 'Client Three',
                 'email' => 'client3@housing4raajje.mv',
                 'phone' => '7000018',
                 'role' => UserRoles::CLIENT,
+                'mfa_enabled' => 1,
+                'email_verified_at' => now(),
             ],
         ];
 
@@ -209,8 +245,9 @@ class DatabaseSeeder extends Seeder
                     'password' => 'password123',
                     'role' => $role,
                     'branch_id' => $branchId,
-                    'mfa_enabled' => false,
                     'status' => 'active',
+                    'mfa_enabled' => $userData['mfa_enabled'],
+                    'email_verified_at' => $userData['email_verified_at'],
                 ]
             );
 
