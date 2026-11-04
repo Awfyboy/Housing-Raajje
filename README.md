@@ -100,7 +100,7 @@ git pull origin <branch-name>
 ---
 
 ### Common Docker-Compose Commands
-These commands should be run in the Docker-Compose bash *(NOT CMD)*. When you enter the Docker bash, your terminal will show *'root@some-id:/var/www/html#'* instead of your project directory. This is where you type the php artisan commands below. You can type *'exit'* to go back to your terminal (whether it is CMD/bash/powershell)
+These commands should be run in the Docker-Compose bash *(NOT CMD)*. When you enter the Docker bash, your terminal will show **"root@some-id:/var/www/html#"** instead of your project directory. This is where you type the php artisan commands below. You can type **"exit"** to go back to your terminal (whether it is CMD/bash/powershell)
 
 ```bash
 # generate APP KEY for local environment
@@ -166,11 +166,11 @@ eg -> feat: add migration and model for leasing
 ---
 
 ### Notes
-- For email verification and MFA code, check 'storage/laravel.logs' and scroll to the bottom of the logs.
+- For email verification and MFA code, check **"storage/laravel.logs"** and scroll to the bottom of the logs.
     - For email verification, you will see a link. Copy the link and paste it into the browser.
     - For MFA, you will see a code. Copy the code and paste it into the field on the Login page.
     <br>
 - If you don't want MFA whenever you login (for example, to test quickly), you can change that in phpMyAdmin
     - Log in to phpMyAdmin, then go to the User's table.
-    - From there, choose whichever user(s) you want and set the 'mfa_enabled' to 0.
+    - From there, choose whichever user(s) you want and set the **mfa_enabled** to 0.
     - This will let you skip MFA on that specific user, so that you can login quickly to test things.
