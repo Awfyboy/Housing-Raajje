@@ -166,12 +166,15 @@ eg -> feat: add migration and model for leasing
 ---
 
 ### Notes
-- There are 18 users that are generated using DatabaseSeeder. Check **"database/seeders/DatabaseSeeder.php"** for some users. Use them for quickly logging in.<br>
+- There are 18 users that are generated using DatabaseSeeder. Check **"database/seeders/DatabaseSeeder.php"** for some users. Use them for quickly logging in.
+<br>
+
 - For email verification and MFA code, check **"storage/laravel.logs"** and scroll to the bottom of the logs.
     - For email verification (after registering), you will see a link. Copy the first link and paste it into the browser.
     - For MFA (logging in), you will see a code. Copy the code and paste it into the field on the Login page.
-    <br>
-- If you don't want MFA whenever you login, you can change that in phpMyAdmin
+<br>
+
+- If you don't want MFA whenever you login, you can change that in phpMyAdmin.
     - Log in to phpMyAdmin, then go to the User's table.
     - From there, choose whichever user(s) you want and set the **mfa_enabled** field to 0.
     - This will let you skip MFA on that specific user, so that you can login quickly to test things.
