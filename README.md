@@ -11,7 +11,7 @@ Developed by Awf, Naaih, Midhuha and Hisan.
 
 ---
 
-## Prerequisites
+### Prerequisites
 Firstly, remember to install Docker Desktop. We will be using it to setup the environment. You won't need to install any of the dependencies manually as Docker will install the necessary packages, but you may need to install Composer (see "Environment Setup" below). After installing Docker Desktop, clone the Github repo to your local computer. You may use Git or GitHub Desktop, either is fine. If you are using Git, then type this in the command prompt to clone.
 
 ```bash
@@ -21,7 +21,7 @@ You should now see the GitHub repo cloned to your local machine.
 
 ---
 
-## Environment Setup
+### Environment Setup
 Now we need to compile the project to Docker. Before compiling, remember to setup the __".env"__ file if you haven't. Create a copy of __".env.example"__ file and name it __".env"__. Then, uncomment the DB related variables in __".env"__ and update them to the following:
 
 ```env
@@ -52,8 +52,9 @@ That should be it. Now if you visit http://localhost:8000, you should see the ap
 
 ---
 
-## Common CMD Commands
+### Common CMD Commands
 These are common commands you would use during the development of the project. These commands should be run in CMD (or Bash/Powershell).
+
 ```bash
 # Builds/rebuilds the docker containers and turns them on
 # Only needs to be run on initial cloning or when dependencies change
@@ -98,8 +99,9 @@ git pull origin <branch-name>
 
 ---
 
-## Common Docker-Compose Commands
+### Common Docker-Compose Commands
 These commands should be run in the Docker-Compose bash *(NOT CMD)*. When you enter the Docker bash, your terminal will show *'root@some-id:/var/www/html#'* instead of your project directory. This is where you type the php artisan commands below. You can type *'exit'* to go back to your terminal (whether it is CMD/bash/powershell)
+
 ```bash
 # generate APP KEY for local environment
 # only run when you first clone the project or if .env file is missing APP_KEY
@@ -135,7 +137,7 @@ php artisan serve
 
 ---
 
-## Commit standard
+### Commit Standards
 When creating commits, follow the given standard. It will make reading the GitHub history easier.
 
 These are the commit types:
@@ -158,5 +160,17 @@ eg -> feat: add migration and model for leasing
 ---
 
 ### Links for testing
-- Laravel app: http://localhost:8000
-- phpMyAdmin (if needed): http://localhost:8080
+- Laravel app (main website): http://localhost:8000
+- phpMyAdmin (for debug testing, contains local database): http://localhost:8080
+
+---
+
+### Notes
+- For email verification and MFA code, check 'storage/laravel.logs' and scroll to the bottom of the logs.
+    - For email verification, you will see a link. Copy the link and paste it into the browser.
+    - For MFA, you will see a code. Copy the code and paste it into the field on the Login page.
+    <br>
+- If you don't want MFA whenever you login (for example, to test quickly), you can change that in phpMyAdmin
+    - Log in to phpMyAdmin, then go to the User's table.
+    - From there, choose whichever user(s) you want and set the 'mfa_enabled' to 0.
+    - This will let you skip MFA on that specific user, so that you can login quickly to test things.
