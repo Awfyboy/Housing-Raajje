@@ -559,15 +559,6 @@
             font-size: 11px;
         }
 
-        .footer-links {
-            display: flex;
-            gap: 20px;
-        }
-
-        .footer-links a:hover {
-            color: #fffdf8;
-        }
-
         /* Responsive layout */
 
         @media (max-width: 1100px) {
@@ -665,10 +656,6 @@
                 font-size: 11px;
             }
 
-            .footer-links {
-                flex-wrap: wrap;
-                gap: 12px;
-            }
         }
     </style>
 
@@ -864,12 +851,6 @@
 
         <footer class="admin-footer">
             <span>© {{ date('Y') }} Housing 4 Raajje</span>
-
-            <nav class="footer-links" aria-label="Footer navigation">
-                <a href="{{ url('/help') }}">Help centre</a>
-                <a href="{{ url('/privacy') }}">Privacy</a>
-                <a href="{{ url('/terms') }}">Terms</a>
-            </nav>
         </footer>
     </div>
 

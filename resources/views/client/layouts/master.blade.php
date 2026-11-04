@@ -324,11 +324,6 @@
     <footer class="site-footer">
         <div class="container-xxl px-3 px-lg-4 py-4 d-flex flex-column flex-sm-row align-items-sm-center justify-content-between gap-3">
             <p class="mb-0">© {{ date('Y') }} Housing 4 Raajje</p>
-            <nav class="d-flex gap-4" aria-label="Footer navigation">
-                <a href="{{ url('/help') }}">Help centre</a>
-                <a href="{{ url('/privacy') }}">Privacy</a>
-                <a href="{{ url('/terms') }}">Terms</a>
-            </nav>
         </div>
     </footer>
 

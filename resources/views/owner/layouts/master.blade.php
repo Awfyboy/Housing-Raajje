@@ -817,11 +817,6 @@
                 &copy; {{ date('Y') }} Housing 4 Raajje
             </p>
 
-            <nav class="d-flex flex-wrap gap-4" aria-label="Footer navigation">
-                <a href="{{ url('/help') }}">Help centre</a>
-                <a href="{{ url('/privacy') }}">Privacy</a>
-                <a href="{{ url('/terms') }}">Terms</a>
-            </nav>
         </div>
     </footer>
 
