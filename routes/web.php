@@ -62,6 +62,15 @@ Route::view('/owner/dashboard', 'owner.dashboard')->name('owner.dashboard');
 //admin
 Route::view('/admin/dashboard', 'admin.dashboard')->name('admin.dashboard');
 
+//staff
+Route::view('/staff/dashboard', 'staff.dashboard')->name('staff.dashboard');
+
+//receptionist
+Route::view('/receptionist/dashboard', 'receptionist.dashboard')->name('receptionist.dashboard');
+
+//branch-manager
+Route::view('/branch-manager/dashboard', 'branch-manager.dashboard')->name('branch-manager.dashboard');
+
 //auth protected later
 /*
 Route::middleware('auth')->group(function () {

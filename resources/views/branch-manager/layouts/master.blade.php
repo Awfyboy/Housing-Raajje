@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>@yield('title', 'Branch Manager Dashboard') | Housing 4 Raajje</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Manrope:wght@400;500;600;700;800&family=Material+Symbols+Outlined" rel="stylesheet">
+
+    <style>
+        :root {
+            --canvas: #f6f8fb;
+            --surface: #ffffff;
+            --surface-soft: #f4f7fb;
+            --surface-input: #f1f4f8;
+
+            --brand-dark: #281a15;
+            --primary: #111827;
+            --primary-hover: #273449;
+            --accent: #d8b7a5;
+
+            --text-primary: #151e32;
+            --text-body: #34445e;
+            --text-muted: #71829e;
+            --text-light: #d4c0b5;
+
+            --border: #dfe6ef;
+            --border-dark: #493128;
+
+            --success: #00875f;
+            --success-bg: #e9fbf3;
+            --warning: #b45309;
+            --warning-bg: #fff6df;
+            --danger: #ba1a1a;
+            --danger-bg: #ffdad6;
+
+            --sidebar-width: 256px;
+            --radius: 12px;
+            --shadow: 0 1px 3px rgba(20, 35, 60, 0.05);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            margin: 0;
+            background: var(--canvas);
+            color: var(--text-body);
+            font-family: 'Manrope', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        button, input, select, textarea {
+            font: inherit;
+        }
+
+        button, a {
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        button {
+            cursor: pointer;
+        }
+
+        h1, h2, h3, h4 {
+            margin: 0;
+        }
+
+        h1, h2, h3 {
+            font-family: 'DM Serif Display', serif;
+            font-weight: 400;
+        }
+
+        .material-symbols-outlined {
+            font-family: 'Material Symbols Outlined';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 20px;
+            line-height: 1;
+            display: inline-flex;
+            white-space: nowrap;
+            direction: ltr;
+            font-feature-settings: 'liga';
+            -webkit-font-feature-settings: 'liga';
+            -webkit-font-smoothing: antialiased;
+        }
+        /* Sidebar */
+
+        .admin-sidebar {
+            position: fixed;
+            inset: 0 auto 0 0;
+            z-index: 100;
+            display: flex;
+            flex-direction: column;
+            width: var(--sidebar-width);
+            overflow-y: auto;
+            overflow-x: hidden;
+            background: var(--brand-dark);
+            color: var(--text-light);
+            transition: transform 0.25s ease;
+        }
+
+        .sidebar-brand {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            flex-shrink: 0;
+            min-height: 72px;
+            padding: 12px 20px;
+            background: #352019;
+            border-bottom: 1px solid var(--border-dark);
+        }
+
+        .brand-name {
+            color: var(--accent);
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        .brand-role {
+            margin-top: 0;
+            color: #fffdf8;
+            font-size: 19px;
+            font-weight: 800;
+            line-height: 1.2;
+            letter-spacing: -0.04em;
+        }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 14px 8px;
+        }
+
+        .nav-group {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .nav-heading {
+            padding: 0 8px 4px;
+            color: #a99588;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            line-height: 1.4;
+            text-transform: uppercase;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            min-height: 34px;
+            padding: 7px 8px;
+            border-radius: 7px;
+            color: #d8c3ae;
+            font-size: 12px;
+            font-weight: 600;
+            line-height: 1.3;
+            transition: background 0.2s, color 0.2s;
+        }
+
+        .nav-link .material-symbols-outlined {
+            font-size: 17px;
+            flex-shrink: 0;
+        }
+
+        .nav-link:hover {
+            background: rgba(227, 205, 184, 0.10);
+            color: #fffdf8;
+        }
+
+        .nav-link.active {
+            background: var(--primary);
+            color: #fffdf8;
+            box-shadow: var(--shadow);
+            font-weight: 800;
+        }
+
+        .nav-link.active .material-symbols-outlined {
+            color: var(--accent);
+        }
+        .sidebar-bottom {
+            flex-shrink: 0;
+            margin-top: auto;
+            padding: 8px;
+            background: rgba(0, 0, 0, 0.12);
+            border-top: 1px solid var(--border-dark);
+        }
+
+        .sidebar-bottom .nav-link {
+            min-height: 34px;
+        }
+
+        .nav-link.logout:hover {
+            background: rgba(186, 26, 26, 0.2);
+            color: #ffdad6;
+        }
+
+        /* Main layout */
+
+        .admin-main {
+            display: flex;
+            min-height: 100vh;
+            flex-direction: column;
+            margin-left: var(--sidebar-width);
+        }
+
+        .admin-topbar {
+            position: sticky;
+            top: 0;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 64px;
+            padding: 10px 32px;
+            background: rgba(255, 255, 255, 0.96);
+            border-bottom: 1px solid var(--border);
+            backdrop-filter: blur(12px);
+        }
+
+        .topbar-label {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+        }
+
+        .topbar-title {
+            margin-top: 2px;
+            color: var(--text-primary);
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .topbar-actions {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-content {
+            flex: 1;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 24px 32px 28px;
+        }
+
+        .page-heading {
+            margin-bottom: 20px;
+        }
+
+        .eyebrow {
+            color: var(--text-muted);
+            font-size: 11px;
+            font-weight: 800;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        .page-title {
+            margin-top: 5px;
+            color: var(--text-primary);
+            font-size: clamp(28px, 3vw, 36px);
+            line-height: 1.2;
+        }
+
+        .page-description {
+            margin: 8px 0 0;
+            color: var(--text-muted);
+            font-size: 13px;
+        }
+
+        /* Buttons */
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            min-height: 42px;
+            padding: 10px 16px;
+            border: 1px solid transparent;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 800;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-secondary {
+            background: var(--surface);
+            border-color: var(--border);
+            color: var(--text-strong, #4d4038);
+        }
+
+        .btn-secondary:hover {
+            background: var(--surface-soft);
+            border-color: var(--border-dark);
+        }
+
+        .icon-button {
+            display: inline-grid;
+            place-items: center;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: 1px solid var(--border);
+            border-radius: 50%;
+            background: var(--surface);
+            color: var(--primary);
+        }
+
+        .icon-button:hover {
+            background: var(--surface-soft);
+        }
+
+        .mobile-menu-button {
+            display: none;
+        }
+
+        .sidebar-backdrop {
+            display: none;
+        }
+
+        /* Cards and shared components */
+
+        .card {
+            min-width: 0;
+            padding: 22px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: var(--surface);
+            box-shadow: var(--shadow);
+        }
+
+        .card-heading {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 18px;
+        }
+
+        .card-title {
+            color: var(--text-primary);
+            font-family: 'Manrope', sans-serif;
+            font-size: 15px;
+            font-weight: 800;
+        }
+
+        .card-subtitle {
+            margin-top: 3px;
+            color: var(--text-muted);
+            font-size: 12px;
+        }
+        .status {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            width: fit-content;
+            padding: 5px 10px;
+            border-radius: 9999px;
+            font-size: 10px;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+        }
+
+        .status-success {
+            background: var(--success-bg);
+            color: var(--success);
+        }
+
+        .status-warning {
+            background: var(--warning-bg);
+            color: var(--warning);
+        }
+
+        .status-neutral {
+            background: #eee5da;
+            color: var(--text-muted);
+        }
+
+        .status-danger {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .status-dot {
+            width: 7px;
+            height: 7px;
+            border-radius: 50%;
+            background: currentColor;
+        }
+
+        /* Pfp menu */
+
+        .profile-menu {
+            position: relative;
+        }
+
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px 4px 4px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .profile-trigger:hover,
+        .profile-menu[open] .profile-trigger {
+            background: var(--surface-soft);
+            border-color: var(--border);
+        }
+
+        .profile-avatar {
+            display: inline-grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            flex-shrink: 0;
+        }
+
+        .profile-name {
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-menu summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .profile-menu summary {
+            list-style: none;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            z-index: 60;
+            min-width: 210px;
+            padding: 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 12px 30px rgba(20, 35, 60, 0.12);
+        }
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 9px 10px;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-body);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--surface-soft);
+            color: var(--text-primary);
+        }
+
+        .dropdown-item .material-symbols-outlined {
+            font-size: 17px;
+            color: var(--text-muted);
+        }
+
+        .dropdown-item-danger {
+            color: var(--danger);
+        }
+
+        .dropdown-item-danger:hover {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .dropdown-item-danger .material-symbols-outlined {
+            color: var(--danger);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            margin: 6px 4px;
+            background: var(--border);
+        }
+
+        /* Footer */
+
+        .admin-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            margin-top: 0;
+            padding: 14px 32px;
+            background: var(--brand-dark);
+            color: var(--text-light);
+            font-size: 11px;
+        }
+        /* Responsive layout */
+
+        @media (max-width: 1100px) {
+            :root {
+                --sidebar-width: 232px;
+            }
+
+            .admin-topbar {
+                padding-right: 24px;
+                padding-left: 24px;
+            }
+
+            .admin-content {
+                padding: 28px 24px 40px;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .admin-sidebar {
+                width: 270px;
+                max-width: 85vw;
+                transform: translateX(-100%);
+            }
+
+            body.sidebar-open .admin-sidebar {
+                transform: translateX(0);
+            }
+
+            .sidebar-backdrop {
+                position: fixed;
+                inset: 0;
+                z-index: 90;
+                background: rgba(39, 28, 23, 0.45);
+            }
+
+            body.sidebar-open .sidebar-backdrop {
+                display: block;
+            }
+
+            .admin-main {
+                margin-left: 0;
+            }
+
+            .admin-topbar {
+                min-height: 68px;
+                gap: 12px;
+                padding: 12px 18px;
+            }
+
+            .mobile-menu-button {
+                display: inline-grid;
+                flex-shrink: 0;
+            }
+
+            .admin-content {
+                padding: 26px 18px 36px;
+            }
+
+            .admin-footer {
+                align-items: flex-start;
+                flex-direction: column;
+                padding: 22px 18px;
+            }
+
+            .topbar-label {
+                font-size: 9px;
+            }
+
+            .topbar-title {
+                font-size: 12px;
+            }
+
+            .profile-name {
+                display: none;
+            }
+        }
+
+        @media (max-width: 420px) {
+            .admin-topbar {
+                padding-right: 12px;
+                padding-left: 12px;
+            }
+
+            .admin-content {
+                padding-right: 12px;
+                padding-left: 12px;
+            }
+
+            .topbar-actions {
+                gap: 5px;
+            }
+
+            .topbar-actions .btn {
+                padding: 8px 10px;
+                font-size: 11px;
+            }
+        }
+    </style>
+
+    @stack('styles')
+</head>
+<body>
+    <aside class="admin-sidebar" id="adminSidebar">
+        <a href="{{ url('/branch-manager/dashboard') }}" class="sidebar-brand">
+            <span class="brand-name">Housing 4 Raajje</span>
+            <span class="brand-role">BRANCH MANAGER</span>
+        </a>
+
+        <nav class="sidebar-nav" aria-label="Branch Manager navigation">
+            <div class="nav-group">
+                <span class="nav-heading">Main</span>
+
+                <a href="{{ url('/branch-manager/dashboard') }}"
+                   class="nav-link @if(request()->is('branch-manager/dashboard')) active @endif"
+                   @if(request()->is('branch-manager/dashboard')) aria-current="page" @endif>
+                    <span class="material-symbols-outlined">grid_view</span>
+                    Dashboard
+                </a>
+            </div>
+
+            <div class="nav-group">
+                <span class="nav-heading">Branch Management</span>
+
+                <a href="{{ url('/branch-manager/staff-management') }}"
+                   class="nav-link @if(request()->is('branch-manager/staff-management*')) active @endif">
+                    <span class="material-symbols-outlined">group</span>
+                    Staff Management
+                </a>
+
+                <a href="{{ url('/branch-manager/clients-owners') }}"
+                   class="nav-link @if(request()->is('branch-manager/clients-owners*')) active @endif">
+                    <span class="material-symbols-outlined">people</span>
+                    Clients & Owners
+                </a>
+
+                <a href="{{ url('/branch-manager/properties') }}"
+                   class="nav-link @if(request()->is('branch-manager/properties*')) active @endif">
+                    <span class="material-symbols-outlined">apartment</span>
+                    Properties
+                </a>
+
+                <a href="{{ url('/branch-manager/property-registrations') }}"
+                   class="nav-link @if(request()->is('branch-manager/property-registrations*')) active @endif">
+                    <span class="material-symbols-outlined">description</span>
+                    Property Registrations
+                </a>
+            </div>
+
+            <div class="nav-group">
+                <span class="nav-heading">Operations Oversight</span>
+
+                <a href="{{ url('/branch-manager/applications') }}"
+                   class="nav-link @if(request()->is('branch-manager/applications*')) active @endif">
+                    <span class="material-symbols-outlined">assignment</span>
+                    Applications
+                </a>
+
+                <a href="{{ url('/branch-manager/viewings') }}"
+                   class="nav-link @if(request()->is('branch-manager/viewings*')) active @endif">
+                    <span class="material-symbols-outlined">visibility</span>
+                    Viewings
+                </a>
+
+                <a href="{{ url('/branch-manager/leases') }}"
+                   class="nav-link @if(request()->is('branch-manager/leases*')) active @endif">
+                    <span class="material-symbols-outlined">history_edu</span>
+                    Leases
+                </a>
+
+                <a href="{{ url('/branch-manager/payments-finance') }}"
+                   class="nav-link @if(request()->is('branch-manager/payments-finance*')) active @endif">
+                    <span class="material-symbols-outlined">payments</span>
+                    Payments & Finance
+                </a>
+
+                <a href="{{ url('/branch-manager/maintenance') }}"
+                   class="nav-link @if(request()->is('branch-manager/maintenance*')) active @endif">
+                    <span class="material-symbols-outlined">handyman</span>
+                    Maintenance
+                </a>
+
+                <a href="{{ url('/branch-manager/disputes-escalations') }}"
+                   class="nav-link @if(request()->is('branch-manager/disputes-escalations*')) active @endif">
+                    <span class="material-symbols-outlined">gavel</span>
+                    Disputes & Escalations
+                </a>
+            </div>
+
+            <div class="nav-group">
+                <span class="nav-heading">Reporting</span>
+
+                <a href="{{ url('/branch-manager/reports') }}"
+                   class="nav-link @if(request()->is('branch-manager/reports*')) active @endif">
+                    <span class="material-symbols-outlined">assessment</span>
+                    Reports
+                </a>
+            </div>
+
+            <div class="nav-group">
+                <span class="nav-heading">Communication</span>
+
+                <a href="{{ url('/branch-manager/messages') }}"
+                   class="nav-link @if(request()->is('branch-manager/messages*')) active @endif">
+                    <span class="material-symbols-outlined">message</span>
+                    Messages
+                </a>
+
+                <a href="{{ url('/branch-manager/notifications') }}"
+                   class="nav-link @if(request()->is('branch-manager/notifications*')) active @endif">
+                    <span class="material-symbols-outlined">notifications</span>
+                    Notifications
+                </a>
+            </div>
+        </nav>
+
+        <div class="sidebar-bottom">
+            <form method="POST" action="{{ url('/logout') }}">
+                @csrf
+                <button type="submit" class="nav-link logout"
+                        style="width: 100%; border: 0; background: transparent; text-align: left;">
+                    <span class="material-symbols-outlined">logout</span>
+                    Logout
+                </button>
+            </form>
+        </div>
+    </aside>
+
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
+
+    <div class="admin-main">
+        <header class="admin-topbar">
+            <div style="display:flex; align-items:center; gap:12px;">
+                <button type="button"
+                        class="icon-button mobile-menu-button"
+                        id="sidebarToggle"
+                        aria-label="Toggle navigation"
+                        aria-controls="adminSidebar"
+                        aria-expanded="false">
+                    <span class="material-symbols-outlined">menu</span>
+                </button>
+
+                <div>
+                    <div class="topbar-label">Branch Console · Malé HQ</div>
+                    <div class="topbar-title">
+                        Signed in as {{ auth()->user()?->name ?? 'Branch Manager' }}
+                    </div>
+                </div>
+            </div>
+
+            @php
+                $branchManagerName = auth()->user()?->name ?? 'Branch Manager';
+                $branchManagerInitials = collect(preg_split('/\s+/', trim($branchManagerName)))
+                    ->filter()
+                    ->take(2)
+                    ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
+                    ->implode('') ?: 'BM';
+            @endphp
+
+            <div class="topbar-actions">
+                @yield('header-actions')
+
+                <details class="profile-menu">
+                    <summary class="profile-trigger" aria-label="Account menu">
+                        <span class="profile-avatar">{{ $branchManagerInitials }}</span>
+                        <span class="profile-name">{{ $branchManagerName }}</span>
+                        <span class="material-symbols-outlined" style="font-size: 18px; color: var(--text-muted);">expand_more</span>
+                    </summary>
+
+                    <div class="profile-dropdown" role="menu">
+                        <a href="{{ url('/branch-manager/profile') }}" class="dropdown-item" role="menuitem">
+                            <span class="material-symbols-outlined">person</span>
+                            My profile
+                        </a>
+
+                        <a href="{{ url('/branch-manager/settings') }}" class="dropdown-item" role="menuitem">
+                            <span class="material-symbols-outlined">settings</span>
+                            Settings
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <form method="POST" action="{{ url('/logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item dropdown-item-danger" role="menuitem">
+                                <span class="material-symbols-outlined">logout</span>
+                                Log out
+                            </button>
+                        </form>
+                    </div>
+                </details>
+            </div>
+        </header>
+
+        <main class="admin-content">
+            @yield('content')
+        </main>
+
+        <footer class="admin-footer">
+            <span>© {{ date('Y') }} Housing 4 Raajje</span>
+        </footer>
+    </div>
+
+    <script>
+        (() => {
+            const toggle = document.getElementById('sidebarToggle');
+            const backdrop = document.getElementById('sidebarBackdrop');
+
+            function setSidebar(open) {
+                document.body.classList.toggle('sidebar-open', open);
+
+                if (toggle) {
+                    toggle.setAttribute('aria-expanded', String(open));
+                }
+            }
+
+            toggle?.addEventListener('click', () => {
+                setSidebar(!document.body.classList.contains('sidebar-open'));
+            });
+
+            backdrop?.addEventListener('click', () => setSidebar(false));
+        })();
+    </script>
+</body>
+</html>
