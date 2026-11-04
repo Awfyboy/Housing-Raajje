@@ -430,6 +430,121 @@
             background: currentColor;
         }
 
+        /* Pfp menu */
+
+        .profile-menu {
+            position: relative;
+        }
+
+        .profile-trigger {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 4px 10px 4px 4px;
+            background: transparent;
+            border: 1px solid transparent;
+            border-radius: 9999px;
+            cursor: pointer;
+            transition: background 0.2s, border-color 0.2s;
+        }
+
+        .profile-trigger:hover,
+        .profile-menu[open] .profile-trigger {
+            background: var(--surface-soft);
+            border-color: var(--border);
+        }
+
+        .profile-avatar {
+            display: inline-grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            background: var(--primary);
+            color: var(--accent);
+            font-size: 12px;
+            font-weight: 800;
+            letter-spacing: 0.02em;
+            flex-shrink: 0;
+        }
+
+        .profile-name {
+            color: var(--text-primary);
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+            max-width: 140px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .profile-menu summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .profile-menu summary {
+            list-style: none;
+        }
+
+        .profile-dropdown {
+            position: absolute;
+            top: calc(100% + 8px);
+            right: 0;
+            z-index: 60;
+            min-width: 210px;
+            padding: 6px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            box-shadow: 0 12px 30px rgba(20, 35, 60, 0.12);
+        }
+
+        .dropdown-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            padding: 9px 10px;
+            border: 0;
+            border-radius: 6px;
+            background: transparent;
+            color: var(--text-body);
+            font-size: 12px;
+            font-weight: 600;
+            text-align: left;
+            cursor: pointer;
+            transition: background 0.15s, color 0.15s;
+        }
+
+        .dropdown-item:hover {
+            background: var(--surface-soft);
+            color: var(--text-primary);
+        }
+
+        .dropdown-item .material-symbols-outlined {
+            font-size: 17px;
+            color: var(--text-muted);
+        }
+
+        .dropdown-item-danger {
+            color: var(--danger);
+        }
+
+        .dropdown-item-danger:hover {
+            background: var(--danger-bg);
+            color: var(--danger);
+        }
+
+        .dropdown-item-danger .material-symbols-outlined {
+            color: var(--danger);
+        }
+
+        .dropdown-divider {
+            height: 1px;
+            margin: 6px 4px;
+            background: var(--border);
+        }
+
         /* Footer */
 
         .admin-footer {
@@ -523,6 +638,10 @@
 
             .topbar-title {
                 font-size: 12px;
+            }
+
+            .profile-name {
+                display: none;
             }
         }
 
@@ -695,8 +814,47 @@
                 </div>
             </div>
 
+            @php
+                $adminName = auth()->user()?->name ?? 'Administrator';
+                $adminInitials = collect(preg_split('/\s+/', trim($adminName)))
+                    ->filter()
+                    ->take(2)
+                    ->map(fn ($part) => strtoupper(substr($part, 0, 1)))
+                    ->implode('') ?: 'A';
+            @endphp
+
             <div class="topbar-actions">
                 @yield('header-actions')
+
+                <details class="profile-menu">
+                    <summary class="profile-trigger" aria-label="Account menu">
+                        <span class="profile-avatar">{{ $adminInitials }}</span>
+                        <span class="profile-name">{{ $adminName }}</span>
+                        <span class="material-symbols-outlined" style="font-size: 18px; color: var(--text-muted);">expand_more</span>
+                    </summary>
+
+                    <div class="profile-dropdown" role="menu">
+                        <a href="{{ url('/admin/profile') }}" class="dropdown-item" role="menuitem">
+                            <span class="material-symbols-outlined">person</span>
+                            My profile
+                        </a>
+
+                        <a href="{{ url('/admin/settings') }}" class="dropdown-item" role="menuitem">
+                            <span class="material-symbols-outlined">settings</span>
+                            Settings
+                        </a>
+
+                        <div class="dropdown-divider"></div>
+
+                        <form method="POST" action="{{ url('/logout') }}">
+                            @csrf
+                            <button type="submit" class="dropdown-item dropdown-item-danger" role="menuitem">
+                                <span class="material-symbols-outlined">logout</span>
+                                Log out
+                            </button>
+                        </form>
+                    </div>
+                </details>
             </div>
         </header>
 
@@ -742,6 +900,15 @@
 
             document.addEventListener('keydown', event => {
                 if (event.key === 'Escape') setSidebar(false);
+            });
+
+            // Close profile dropdown when clicking outside
+            document.addEventListener('click', (event) => {
+                document.querySelectorAll('details.profile-menu[open]').forEach(menu => {
+                    if (!menu.contains(event.target)) {
+                        menu.removeAttribute('open');
+                    }
+                });
             });
         })();
     </script>

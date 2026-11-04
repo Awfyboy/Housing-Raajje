@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Enums\UserRole;
-use App\Models\Entity\Admin;
+use Illuminate\Contracts\Auth\MustVerifyEmail;  // uncomment
+use App\Enums\UserRoles;
+use App\Models\Entity\Admin;  
 use App\Models\Entity\Branch;
 use App\Models\Entity\BranchManager;
 use App\Models\Entity\Client;
@@ -37,7 +37,7 @@ use Illuminate\Notifications\Notifiable;
     'status',
 ])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail   
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -47,7 +47,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'role' => UserRole::class,
+            'role' => UserRoles::class,
             'mfa_enabled' => 'boolean',
         ];
     }
@@ -85,6 +85,11 @@ class User extends Authenticatable
     public function clientProfile(): HasOne
     {
         return $this->hasOne(Client::class);
+    }
+
+    public function mfaTokens(): HasMany   // mfa
+    {
+        return $this->hasMany(MfaToken::class);
     }
 
     public function sentMessages(): HasMany
