@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Password;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
@@ -21,6 +23,10 @@ class LoginController extends Controller
 
     public function store(Request $request)
     {
+        User::whereNull('email_verified_at') 
+            ->where('created_at', '<', now()->subMinutes(10))
+            ->delete();
+
         $credentials = $request->validate([
             'email'    => ['required', 'email'],
             'password' => ['required', 'string'],
@@ -34,9 +40,9 @@ class LoginController extends Controller
             ]);
         }
 
-        if (! Auth::attempt($credentials, $request->boolean('remember'))) {
+        //This validates credentials WITHOUT logging them in.
+        if (! Auth::once($credentials)) {
             RateLimiter::hit($throttleKey, 60);
-
             throw ValidationException::withMessages([
                 'email' => __('These credentials do not match our records.'),
             ]);
@@ -44,20 +50,23 @@ class LoginController extends Controller
 
         RateLimiter::clear($throttleKey);
 
-        $user = Auth::user();
+        // Load the user manually (since `once` doesn't persist)
+        $user = User::where('email', $credentials['email'])->first();
 
-        // If the account is not 'active' (e.g., suspended/inactive), block them.
+        if (! $user) {
+            throw ValidationException::withMessages([
+                'email' => __('These credentials do not match our records.'),
+            ]);
+        }
+
+        // Status check
         if ($user->status !== 'active') {
-            Auth::logout();
-            $request->session()->invalidate();
-            $request->session()->regenerateToken();
-
             throw ValidationException::withMessages([
                 'email' => "Your account is currently {$user->status}. Please contact support.",
             ]);
         }
 
-        //MFA check?
+        // MFA check
         if ($user->mfa_enabled) {
             $user->mfaTokens()->where('purpose', 'login')->whereNull('used_at')->delete();
             $plainCode = str_pad((string) random_int(0, 999999), 6, '0', STR_PAD_LEFT);
@@ -68,20 +77,23 @@ class LoginController extends Controller
                 'expires_at' => now()->addMinutes(10),
             ]);
 
-            \Illuminate\Support\Facades\Mail::raw(
+            Mail::raw(
                 "Your Housing Raajje login code is: {$plainCode}\n\nIt expires in 10 minutes.",
                 fn ($message) => $message->to($user->email)->subject('Your Login Code')
             );
 
-            Auth::logout();
+            // 🆕 Save user ID and remember choice in session (no Auth::logout needed!)
             $request->session()->put('mfa_user_id', $user->id);
+            $request->session()->put('mfa_remember', $request->boolean('remember'));
 
             return redirect()->route('mfa.show');
         }
 
+        //No MFA: Log in directly
+        Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route($user->dashboardRoute()));
     }
 
     public function destroy(Request $request)
@@ -93,8 +105,7 @@ class LoginController extends Controller
         return redirect()->route('login');
     }
 
-
-    //PASSWORD RESET METHODS 
+    //PASSWORD RESET METHODS
     public function sendResetLink(Request $request)
     {
         $request->validate(['email' => 'required|email']);
@@ -108,7 +119,6 @@ class LoginController extends Controller
 
     public function showResetForm(Request $request, string $token)
     {
-        //passes the token and email to the existing login view
         return view('auth.login', [
             'token' => $token,
             'email' => $request->email

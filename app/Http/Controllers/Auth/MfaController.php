@@ -26,13 +26,14 @@ class MfaController extends Controller
         $request->validate(['code' => ['required', 'string', 'digits:6']]);
 
         $userId = $request->session()->get('mfa_user_id');
+        $remember = $request->session()->get('mfa_remember', false); // 🆕 Retrieve remember choice
         $user   = User::find($userId);
 
         if (! $user) {
             return redirect()->route('login');
         }
 
-        //Rate limit MFA attempts per user
+        // Rate limit MFA attempts per user
         $key = 'mfa|' . $user->id;
         if (RateLimiter::tooManyAttempts($key, 5)) {
             $seconds = RateLimiter::availableIn($key);
@@ -51,21 +52,22 @@ class MfaController extends Controller
 
         if (! $token || ! Hash::check($request->code, $token->code)) {
             RateLimiter::hit($key, 60);
-
             throw ValidationException::withMessages([
                 'code' => 'The code is invalid or has expired.',
             ]);
         }
 
-        // Mark the token as used so it can't be replayed
+        // Mark the token as used
         $token->update(['used_at' => now()]);
-
         RateLimiter::clear($key);
 
-        Auth::login($user);
-        $request->session()->forget('mfa_user_id');
+        //Log in WITH the remember flag
+        Auth::login($user, $remember);
+        
+        // Clean up session
+        $request->session()->forget(['mfa_user_id', 'mfa_remember']);
         $request->session()->regenerate();
 
-        return redirect()->intended(route('dashboard'));
+        return redirect()->intended(route($user->dashboardRoute()));
     }
 }

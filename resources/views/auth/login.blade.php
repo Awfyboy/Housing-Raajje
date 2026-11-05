@@ -11,7 +11,6 @@
             <p class="text-muted">Choose a strong new password for your account.</p>
         </div>
 
-        {{-- Validation errors --}}
         @if ($errors->any())
             <div class="alert alert-danger small">
                 <ul class="mb-0 ps-3">
@@ -24,8 +23,6 @@
 
         <form method="POST" action="{{ route('password.store') }}">
             @csrf
-            
-            {{-- Hidden token from the email link --}}
             <input type="hidden" name="token" value="{{ $token }}">
 
             <div class="mb-3">
@@ -49,20 +46,17 @@
             <button type="submit" class="btn btn-hr w-100">Reset Password</button>
         </form>
 
-
-    {{-- FORGOT PASSWORD (Hit the route) --}}
+    {{-- FORGOT PASSWORD --}}
     @elseif (request()->routeIs('password.request'))
         <div class="text-center mb-4">
             <h2 class="font-display">Reset Password</h2>
             <p class="text-muted">Enter your email and we'll send you a link to reset your password.</p>
         </div>
 
-        {{-- Password reset link sent --}}
         @if (session('status'))
             <div class="alert alert-success small">{{ session('status') }}</div>
         @endif
 
-        {{-- Validation errors --}}
         @if ($errors->any())
             <div class="alert alert-danger small">
                 <ul class="mb-0 ps-3">
@@ -75,7 +69,6 @@
 
         <form method="POST" action="{{ route('password.email') }}">
             @csrf
-
             <div class="mb-4">
                 <label for="email" class="form-label fw-bold small">Email Address</label>
                 <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required autofocus>
@@ -92,20 +85,31 @@
             </p>
         </form>
 
-
-    {{-- NORMAL LOGIN --}}
+    {{--NORMAL LOGIN --}}
     @else
         <div class="text-center mb-4">
             <h2 class="font-display">Welcome Back</h2>
             <p class="text-muted">Log in to your Housing 4 Raajje account.</p>
         </div>
 
-        {{-- Password reset link sent --}}
+        {{--Account Expired Message --}}
+        @if (request()->has('expired'))
+            <div class="alert alert-danger small fw-bold">
+                ⏰ Your verification time expired. Please register again.
+            </div>
+        @endif
+
+        {{--Email Verified Success Message --}}
+        @if (session('verified'))
+            <div class="alert alert-success small fw-bold">
+                 {{ session('verified') }}
+            </div>
+        @endif
+
         @if (session('status'))
             <div class="alert alert-success small">{{ session('status') }}</div>
         @endif
 
-        {{-- Validation errors --}}
         @if ($errors->any())
             <div class="alert alert-danger small">
                 <ul class="mb-0 ps-3">
@@ -121,8 +125,7 @@
 
             <div class="mb-3">
                 <label for="email" class="form-label fw-bold small">Email Address</label>
-                <input type="email" class="form-control @error('email') is-invalid @enderror"
-                       id="email" name="email" value="{{ old('email') }}" required autofocus>
+                <input type="email" class="form-control @error('email') is-invalid @enderror" id="email" name="email" value="{{ old('email') }}" required autofocus>
                 @error('email')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
@@ -135,16 +138,14 @@
                         <a href="{{ route('password.request') }}" class="small text-decoration-none">Forgot password?</a>
                     @endif
                 </div>
-                <input type="password" class="form-control @error('password') is-invalid @enderror"
-                       id="password" name="password" required>
+                <input type="password" class="form-control @error('password') is-invalid @enderror" id="password" name="password" required>
                 @error('password')
                     <div class="invalid-feedback">{{ $message }}</div>
                 @enderror
             </div>
 
             <div class="form-check mb-4">
-                <input class="form-check-input" type="checkbox" name="remember" id="remember"
-                       {{ old('remember') ? 'checked' : '' }}>
+                <input class="form-check-input" type="checkbox" name="remember" id="remember" {{ old('remember') ? 'checked' : '' }}>
                 <label class="form-check-label small" for="remember">Remember me</label>
             </div>
 

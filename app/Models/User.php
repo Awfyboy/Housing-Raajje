@@ -2,7 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Contracts\Auth\MustVerifyEmail;  // uncomment
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 use App\Enums\UserRoles;
 use App\Models\Entity\Admin;  
 use App\Models\Entity\Branch;
@@ -52,6 +52,19 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
+    public function dashboardRoute(): string #the funny dashboard routes
+    {
+        return match ($this->role) {
+            UserRoles::ADMIN            => 'admin.dashboard',
+            UserRoles::BRANCH_MANAGER   => 'branch-manager.dashboard',
+            UserRoles::STAFF            => 'staff.dashboard',
+            UserRoles::RECEPTIONIST     => 'receptionist.dashboard',
+            UserRoles::PROPERTY_OWNER   => 'owner.dashboard',
+            UserRoles::CLIENT           => 'client.dashboard',
+            default                     => 'home',
+        };
+    }
+
     public function branch(): BelongsTo
     {
         return $this->belongsTo(Branch::class);
@@ -87,7 +100,7 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(Client::class);
     }
 
-    public function mfaTokens(): HasMany   // mfa
+    public function mfaTokens(): HasMany
     {
         return $this->hasMany(MfaToken::class);
     }

@@ -40,6 +40,31 @@
             @enderror
         </div>
 
+        {{-- ROLE SELECTION --}}
+        <div class="mb-4">
+            <label class="form-label fw-bold small">Register as</label>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="role" id="role_client"
+                       value="client" {{ old('role', 'client') === 'client' ? 'checked' : '' }}>
+                <label class="form-check-label" for="role_client">
+                    Tenant
+                </label>
+            </div>
+
+            <div class="form-check">
+                <input class="form-check-input" type="radio" name="role" id="role_owner"
+                       value="property_owner" {{ old('role') === 'property_owner' ? 'checked' : '' }}>
+                <label class="form-check-label" for="role_owner">
+                    Property Owner
+                </label>
+            </div>
+
+            @error('role')
+                <div class="text-danger small mt-1">{{ $message }}</div>
+            @enderror
+        </div>
+
         <div class="mb-3">
             <label for="password" class="form-label fw-bold small">Password</label>
             <input type="password" class="form-control @error('password') is-invalid @enderror"

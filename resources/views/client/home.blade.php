@@ -6,6 +6,7 @@
 
 @push('styles')
 <style>
+    /* ... YOUR EXACT STYLES REMAIN UNCHANGED ... */
     .hero {
         position: relative;
         overflow: hidden;
@@ -68,7 +69,7 @@
     .property-image-wrap {
         position: relative;
         overflow: hidden;
-        aspect-ratio: 16 / 10;
+        aspect-ratio: 1 / 1;
         background: #e8dfd3;
     }
 
@@ -323,93 +324,96 @@
             </a>
         </section>
 
-        <!-- Client activity -->
-        <section class="mt-5 pt-lg-4" aria-labelledby="activity-heading">
-            <div class="mb-4">
-                <h2 class="section-heading mb-1" id="activity-heading">Your activity</h2>
-                <p class="text-muted-custom small mb-0">A quick look at your applications, viewings and lease.</p>
-            </div>
-
-            <div class="row g-4">
-                <!-- Applications -->
-                <div class="col-lg-3 col-md-6">
-                    <article class="card activity-card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-start justify-content-between">
-                                <span class="activity-icon" aria-hidden="true">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
-                                    </svg>
-                                </span>
-                                <span class="status-pill">Active</span>
-                            </div>
-                            <p class="text-muted-custom small fw-bold mt-4 mb-1">Applications</p>
-                            <p class="display-6 fw-bold mb-0">2</p>
-                            <a class="text-link mt-4" href="{{ url('/client/applications') }}">View applications <span aria-hidden="true">→</span></a>
-                        </div>
-                    </article>
+        {{-- AUTHENTICATED CLIENT ACTIVITY ONLY --}}
+        @auth
+            <!-- Client activity -->
+            <section class="mt-5 pt-lg-4" aria-labelledby="activity-heading">
+                <div class="mb-4">
+                    <h2 class="section-heading mb-1" id="activity-heading">Your activity</h2>
+                    <p class="text-muted-custom small mb-0">A quick look at your applications, viewings and lease.</p>
                 </div>
 
-                <!-- Viewing -->
-                <div class="col-lg-4 col-md-6">
-                    <article class="card activity-card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-start justify-content-between">
-                                <span class="activity-icon" aria-hidden="true">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <rect x="3" y="4" width="18" height="18" rx="2"></rect>
-                                        <path d="M16 2v4M8 2v4M3 10h18"></path>
-                                    </svg>
-                                </span>
-                                <span class="status-pill success">Confirmed</span>
-                            </div>
-                            <p class="text-muted-custom small fw-bold mt-4 mb-1">Upcoming viewing</p>
-                            <p class="h5 fw-bold mb-2">Tomorrow, 4:00 PM</p>
-                            <p class="property-location mb-0">
-                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle>
-                                </svg>
-                                Ocean View Residence, Apt 204
-                            </p>
-                            <a class="text-link mt-4" href="{{ url('/client/schedule') }}">View schedule <span aria-hidden="true">→</span></a>
-                        </div>
-                    </article>
-                </div>
-
-                <!-- Current lease -->
-                <div class="col-lg-5">
-                    <article class="card activity-card lease-card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-start justify-content-between">
-                                <span class="activity-icon" style="background: rgba(67, 45, 36, .1); color: var(--hr-primary);" aria-hidden="true">
-                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
-                                        <path d="m3 11 9-8 9 8"></path><path d="M5 10v10h14V10M9 20v-6h6v6"></path>
-                                    </svg>
-                                </span>
-                                <span class="status-pill success">Paid</span>
-                            </div>
-
-                            <div class="row g-3 align-items-end mt-3">
-                                <div class="col-sm">
-                                    <p class="small fw-bold mb-1" style="color: #6d5548;">Current lease</p>
-                                    <h3 class="h5 fw-bold mb-2">Ocean View Residence</h3>
-                                    <p class="small mb-0" style="color: #6d5548;">MVR 18,000 / month · Apt 204</p>
+                <div class="row g-4">
+                    <!-- Applications -->
+                    <div class="col-lg-3 col-md-6">
+                        <article class="card activity-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <span class="activity-icon" aria-hidden="true">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="status-pill">Active</span>
                                 </div>
-                                <div class="col-sm-auto">
-                                    <p class="small fw-semibold mb-1" style="color: #6d5548;">Next payment</p>
-                                    <p class="small fw-bold mb-0">Due March 8</p>
-                                </div>
+                                <p class="text-muted-custom small fw-bold mt-4 mb-1">Applications</p>
+                                <p class="display-6 fw-bold mb-0">2</p>
+                                <a class="text-link mt-4" href="{{ url('/client/applications') }}">View applications <span aria-hidden="true">→</span></a>
                             </div>
+                        </article>
+                    </div>
 
-                            <div class="lease-progress mt-4" role="progressbar" aria-label="Lease progress" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
-                                <div class="lease-progress-bar"></div>
+                    <!-- Viewing -->
+                    <div class="col-lg-4 col-md-6">
+                        <article class="card activity-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <span class="activity-icon" aria-hidden="true">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <rect x="3" y="4" width="18" height="18" rx="2"></rect>
+                                            <path d="M16 2v4M8 2v4M3 10h18"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="status-pill success">Confirmed</span>
+                                </div>
+                                <p class="text-muted-custom small fw-bold mt-4 mb-1">Upcoming viewing</p>
+                                <p class="h5 fw-bold mb-2">Tomorrow, 4:00 PM</p>
+                                <p class="property-location mb-0">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle>
+                                    </svg>
+                                    Ocean View Residence, Apt 204
+                                </p>
+                                <a class="text-link mt-4" href="{{ url('/client/schedule') }}">View schedule <span aria-hidden="true">→</span></a>
                             </div>
-                            <a class="text-link mt-4" href="{{ url('/client/leases') }}">Manage lease <span aria-hidden="true">→</span></a>
-                        </div>
-                    </article>
+                        </article>
+                    </div>
+
+                    <!-- Current lease -->
+                    <div class="col-lg-5">
+                        <article class="card activity-card lease-card">
+                            <div class="card-body">
+                                <div class="d-flex align-items-start justify-content-between">
+                                    <span class="activity-icon" style="background: rgba(67, 45, 36, .1); color: var(--hr-primary);" aria-hidden="true">
+                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                            <path d="m3 11 9-8 9 8"></path><path d="M5 10v10h14V10M9 20v-6h6v6"></path>
+                                        </svg>
+                                    </span>
+                                    <span class="status-pill success">Paid</span>
+                                </div>
+
+                                <div class="row g-3 align-items-end mt-3">
+                                    <div class="col-sm">
+                                        <p class="small fw-bold mb-1" style="color: #6d5548;">Current lease</p>
+                                        <h3 class="h5 fw-bold mb-2">Ocean View Residence</h3>
+                                        <p class="small mb-0" style="color: #6d5548;">MVR 18,000 / month · Apt 204</p>
+                                    </div>
+                                    <div class="col-sm-auto">
+                                        <p class="small fw-semibold mb-1" style="color: #6d5548;">Next payment</p>
+                                        <p class="small fw-bold mb-0">Due March 8</p>
+                                    </div>
+                                </div>
+
+                                <div class="lease-progress mt-4" role="progressbar" aria-label="Lease progress" aria-valuenow="83" aria-valuemin="0" aria-valuemax="100">
+                                    <div class="lease-progress-bar"></div>
+                                </div>
+                                <a class="text-link mt-4" href="{{ url('/client/leases') }}">Manage lease <span aria-hidden="true">→</span></a>
+                            </div>
+                        </article>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+        @endauth
     </div>
 @endsection
 

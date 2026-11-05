@@ -151,16 +151,18 @@
                 HOUSING <span>4</span> RAAJJE
             </a>
             
-            <!-- Toggle between Login and Register -->
-            <div class="d-flex gap-3 align-items-center">
-                @if(Route::is('login'))
-                    <span class="text-muted small d-none d-sm-inline">Don't have an account?</span>
-                    <a href="{{ route('register') }}" class="auth-link">Register &rarr;</a>
-                @else
-                    <span class="text-muted small d-none d-sm-inline">Already have an account?</span>
-                    <a href="{{ route('login') }}" class="auth-link">Log In &rarr;</a>
-                @endif
-            </div>
+            {{-- Toggle between Login and Register, hide entirely on verify page --}}
+            @if(!Route::is('verification.notice'))
+                <div class="d-flex gap-2 align-items-center">
+                    @if(Route::is('login'))
+                        <a href="{{ route('register') }}" class="btn btn-hr rounded-pill px-4">Register</a>
+                    @elseif(Route::is('register'))
+                        <a href="{{ route('login') }}" class="btn btn-hr rounded-pill px-4">Log In</a>
+                    @else
+                        <a href="{{ route('login') }}" class="btn btn-hr rounded-pill px-4">Log In</a>
+                    @endif
+                </div>
+            @endif
         </div>
     </header>
 

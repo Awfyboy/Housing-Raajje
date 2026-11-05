@@ -223,94 +223,101 @@
     <header class="site-header">
         <nav class="navbar navbar-expand-lg navbar-dark">
             <div class="container-xxl px-3 px-lg-4">
-                <a class="brand me-lg-4" href="{{ url('/client') }}" aria-label="Housing 4 Raajje home">
+                <a class="brand me-lg-4" href="{{ url('/') }}" aria-label="Housing 4 Raajje home">
                     HOUSING <span>4</span> RAAJJE
                 </a>
 
-                <div class="d-flex align-items-center gap-2 order-lg-3">
-                    <div class="dropdown">
-                        <button class="icon-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="View notifications">
-                            <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
-                            </svg>
-                            <span class="notification-dot"></span>
-                        </button>
-                        <div class="dropdown-menu dropdown-menu-end p-3 shadow" style="min-width: 280px;">
-                            <h6 class="mb-2">Notifications</h6>
-                            <a class="dropdown-item rounded py-2" href="{{ url('/client/schedule') }}">Your viewing has been confirmed</a>
-                            <a class="dropdown-item rounded py-2" href="{{ url('/client/applications') }}">An application status was updated</a>
-                            <a class="dropdown-item rounded py-2" href="{{ url('/client/notifications') }}">View all notifications</a>
+                @guest
+                    {{-- GUEST HEADER ACTIONS --}}
+                    <div class="d-flex align-items-center gap-2 ms-auto">
+                        <a href="{{ route('login') }}" class="btn btn-hr rounded-pill px-4">Log In</a>
+                        <a href="{{ route('register') }}" class="btn btn-hr rounded-pill px-4">Register</a>
+                    </div>
+                @endguest
+
+                @auth
+                    {{-- LOGGED IN ACTIONS --}}
+                    <div class="d-flex align-items-center gap-2 order-lg-3">
+                        <div class="dropdown">
+                            <button class="icon-button" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="View notifications">
+                                <svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                    <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"></path>
+                                    <path d="M13.73 21a2 2 0 0 1-3.46 0"></path>
+                                </svg>
+                                <span class="notification-dot"></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-end p-3 shadow" style="min-width: 280px;">
+                                <h6 class="mb-2">Notifications</h6>
+                                <a class="dropdown-item rounded py-2" href="{{ url('/client/schedule') }}">Your viewing has been confirmed</a>
+                                <a class="dropdown-item rounded py-2" href="{{ url('/client/applications') }}">An application status was updated</a>
+                                <a class="dropdown-item rounded py-2" href="{{ url('/client/notifications') }}">View all notifications</a>
+                            </div>
                         </div>
+
+                        <div class="dropdown d-none d-sm-block">
+                            <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <span class="profile-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'Aishath', 0, 1)) }}{{ strtoupper(substr(strstr(Auth::user()->name ?? 'Aishath', ' ') ?: 'M', 1, 1)) }}</span>
+                                <span class="small fw-bold">{{ Auth::user()->name ?? 'Aishath' }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow">
+                                <li><a class="dropdown-item" href="{{ url('/client/profile') }}">My profile</a></li>
+                                <li><a class="dropdown-item" href="{{ url('/client/settings') }}">Preferences &amp; security</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li>
+                                    <form method="POST" action="{{ route('logout') }}">
+                                        @csrf
+                                        <button class="dropdown-item" type="submit">Log out</button>
+                                    </form>
+                                </li>
+                            </ul>
+                        </div>
+
+                        <button class="navbar-toggler ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#clientNavbar" aria-controls="clientNavbar" aria-expanded="false" aria-label="Toggle navigation">
+                            <span class="navbar-toggler-icon"></span>
+                        </button>
                     </div>
 
-                    <div class="dropdown d-none d-sm-block">
-                        <button class="profile-button dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <span class="profile-avatar">{{ strtoupper(substr(Auth::user()->name ?? 'Aishath', 0, 1)) }}{{ strtoupper(substr(strstr(Auth::user()->name ?? 'Aishath', ' ') ?: 'M', 1, 1)) }}</span>
-                            <span class="small fw-bold">{{ Auth::user()->name ?? 'Aishath' }}</span>
-                        </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow">
-                            <li><a class="dropdown-item" href="{{ url('/client/profile') }}">My profile</a></li>
-                            <li><a class="dropdown-item" href="{{ url('/client/settings') }}">Preferences &amp; security</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li>
-                                <form method="POST" action="{{ url('/logout') }}">
+                    <div class="collapse navbar-collapse order-lg-2 me-lg-4" id="clientNavbar">
+                        <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
+                            <li class="nav-item">
+                                <a class="nav-link @if(View::yieldContent('activeNav') === 'home') active @endif" href="{{ url('/') }}">
+                                    Home
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @if(View::yieldContent('activeNav') === 'properties') active @endif" href="{{ route('client.properties') }}">
+                                    Properties
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @if(View::yieldContent('activeNav') === 'schedule') active @endif" href="{{ url('/client/schedule') }}">
+                                    Schedule
+                                </a>
+                            </li>
+
+                            <li class="nav-item">
+                                <a class="nav-link @if(View::yieldContent('activeNav') === 'messages') active @endif" href="{{ url('/client/messages') }}">
+                                    Messages
+                                </a>
+                            </li>
+
+                            <li class="nav-item d-sm-none">
+                                <a class="nav-link" href="{{ url('/client/profile') }}">My profile</a>
+                            </li>
+
+                            <li class="nav-item d-sm-none">
+                                <form method="POST" action="{{ route('logout') }}">
                                     @csrf
-                                    <button class="dropdown-item" type="submit">Log out</button>
+                                    <button class="nav-link border-0 bg-transparent" type="submit">
+                                        Log out
+                                    </button>
                                 </form>
                             </li>
                         </ul>
                     </div>
-
-                    <button class="navbar-toggler ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#clientNavbar" aria-controls="clientNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                        <span class="navbar-toggler-icon"></span>
-                    </button>
-                </div>
-
-                <div class="collapse navbar-collapse order-lg-2 me-lg-4" id="clientNavbar">
-                    <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
-                        <li class="nav-item">
-                            <a class="nav-link @if(View::yieldContent('activeNav') === 'home') active @endif"
-                            href="{{ url('/client') }}">
-                                Home
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link @if(View::yieldContent('activeNav') === 'properties') active @endif"
-                            href="{{ url('/client/properties') }}">
-                                Properties
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link @if(View::yieldContent('activeNav') === 'schedule') active @endif"
-                            href="{{ url('/client/schedule') }}">
-                                Schedule
-                            </a>
-                        </li>
-
-                        <li class="nav-item">
-                            <a class="nav-link @if(View::yieldContent('activeNav') === 'messages') active @endif"
-                            href="{{ url('/client/messages') }}">
-                                Messages
-                            </a>
-                        </li>
-
-                        <li class="nav-item d-sm-none">
-                            <a class="nav-link" href="{{ url('/client/profile') }}">My profile</a>
-                        </li>
-
-                        <li class="nav-item d-sm-none">
-                            <form method="POST" action="{{ url('/logout') }}">
-                                @csrf
-                                <button class="nav-link border-0 bg-transparent" type="submit">
-                                    Log out
-                                </button>
-                            </form>
-                        </li>
-                    </ul>
-                </div>
+                @endauth
             </div>
         </nav>
     </header>
