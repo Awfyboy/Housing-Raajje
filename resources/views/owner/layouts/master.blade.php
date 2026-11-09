@@ -686,7 +686,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-end shadow mt-2">
                             <li>
-                                <a class="dropdown-item" href="{{ url('/owner/profile') }}">
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                     My profile
                                 </a>
                             </li>

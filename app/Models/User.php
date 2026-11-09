@@ -35,6 +35,12 @@ use Illuminate\Notifications\Notifiable;
     'branch_id',
     'mfa_enabled',
     'status',
+    'avatar_path',
+    'pending_email',
+    'pending_email_token',
+    'admin_request_type',
+    'admin_request_note',
+    'admin_request_status',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail   

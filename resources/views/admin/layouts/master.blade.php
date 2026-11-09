@@ -204,23 +204,6 @@
             color: var(--accent);
         }
 
-        .sidebar-bottom {
-            flex-shrink: 0;
-            margin-top: auto;
-            padding: 8px;
-            background: rgba(0, 0, 0, 0.12);
-            border-top: 1px solid var(--border-dark);
-        }
-
-        .sidebar-bottom .nav-link {
-            min-height: 34px;
-        }
-
-        .nav-link.logout:hover {
-            background: rgba(186, 26, 26, 0.2);
-            color: #ffdad6;
-        }
-
         /* Main layout */
 
         .admin-main {
@@ -685,16 +668,10 @@
             <div class="nav-group">
                 <span class="nav-heading">Management</span>
 
-                <a href="{{ url('/admin/users') }}"
+                <a href="{{ route('admin.users.index') }}"
                    class="nav-link @if(request()->is('admin/users*')) active @endif">
                     <span class="material-symbols-outlined">group</span>
                     Users
-                </a>
-
-                <a href="{{ url('/admin/roles') }}"
-                   class="nav-link @if(request()->is('admin/roles*')) active @endif">
-                    <span class="material-symbols-outlined">badge</span>
-                    Roles
                 </a>
 
                 <a href="{{ url('/admin/branches') }}"
@@ -747,7 +724,7 @@
             <div class="nav-group">
                 <span class="nav-heading">System</span>
 
-                <a href="{{ url('/admin/audit-logs') }}"
+                <a href="{{ route('admin.audit-logs.index') }}"
                    class="nav-link @if(request()->is('admin/audit-logs*')) active @endif">
                     <span class="material-symbols-outlined">receipt_long</span>
                     Audit Logs
@@ -766,17 +743,6 @@
                 </a>
             </div>
         </nav>
-
-        <div class="sidebar-bottom">
-            <form method="POST" action="{{ url('/logout') }}">
-                @csrf
-                <button type="submit" class="nav-link logout"
-                        style="width: 100%; border: 0; background: transparent; text-align: left;">
-                    <span class="material-symbols-outlined">logout</span>
-                    Logout
-                </button>
-            </form>
-        </div>
     </aside>
 
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
@@ -821,7 +787,7 @@
                     </summary>
 
                     <div class="profile-dropdown" role="menu">
-                        <a href="{{ url('/admin/profile') }}" class="dropdown-item" role="menuitem">
+                        <a href="{{ route('profile.edit') }}" class="dropdown-item" role="menuitem">
                             <span class="material-symbols-outlined">person</span>
                             My profile
                         </a>

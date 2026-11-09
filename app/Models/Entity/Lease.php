@@ -29,10 +29,10 @@ class Lease extends Model
         'advance_payment',
         'owner_signed_at',
         'client_signed_at',
-        'signed_document_path',
-        'status',
-        'termination_reason',
-        'terminated_at',
+        'signed_document_path',   // updating
+        'status',                 // updating
+        'termination_reason',     // updating
+        'terminated_at',          // updating
     ];
 
     protected function casts(): array
