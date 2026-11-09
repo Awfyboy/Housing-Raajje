@@ -12,25 +12,36 @@ class BranchSeeder extends Seeder
     {
         $branches = [
             [
-                'name' => 'Malé Branch',
+                'name' => 'Malé Central Branch',
                 'location' => BranchLocations::MALE,
-                'address' => 'Malé, Maldives',
+                'address' => 'Henveiru District, Boduthakurufaanu Magu, 20026',
             ],
             [
-                'name' => 'Hulhumalé Branch',
+                'name' => 'Malé West Branch',
+                'location' => BranchLocations::MALE,
+                'address' => 'Maafannu District, Chaandhanee Magu, 20063',
+            ],
+            [
+                'name' => 'Hulhumalé Phase 1 Branch',
                 'location' => BranchLocations::HULHUMALE,
-                'address' => 'Hulhumalé, Maldives',
+                'address' => 'Phase 1, Medhu Goalhi, Lot 11122, 23000',
+            ],
+            [
+                'name' => 'Hulhumalé Phase 2 Branch',
+                'location' => BranchLocations::HULHUMALE,
+                'address' => 'Phase 2, Neeloafaru Magu, Lot 11483, 21000',
             ],
             [
                 'name' => 'Villingili Branch',
                 'location' => BranchLocations::VILLINGILI,
-                'address' => 'Villingili, Maldives',
+                'address' => 'Ameer Ahmed Magu, Goalhi 5, 21000',
             ],
         ];
 
         foreach ($branches as $branchData) {
+            // Use 'name' as the unique identifier
             Branch::updateOrCreate(
-                ['location' => $branchData['location']->value],
+                ['name' => $branchData['name']],
                 $branchData
             );
         }

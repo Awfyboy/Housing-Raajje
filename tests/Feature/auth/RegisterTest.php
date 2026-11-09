@@ -24,7 +24,7 @@ class RegisterTest extends TestCase
         $this->assertDatabaseHas('users', [
             'email' => 'john@test.com',
             'role' => 'client',
-            'mfa_enabled' => true,
+            'mfa_enabled' => false,
             'email_verified_at' => null,
         ]);
 

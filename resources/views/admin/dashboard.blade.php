@@ -17,15 +17,28 @@
 @section('content')
     <div class="page-heading">
         <div class="eyebrow">Administration / Overview</div>
-
         <h1 class="page-title">Dashboard</h1>
-
         <p class="page-description">
             Monitor users, property activity, and system operations across all branches.
         </p>
     </div>
 
-    {{-- Primary statistics --}}
+    {{--Pending Requests Alert --}}
+    @if($pendingRequestsCount > 0)
+        <div class="card mb-4" style="border-color: #ffda6a; background: #fffdf5; padding: 1rem 1.5rem;">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                    <strong style="color: #b45309;">{{ $pendingRequestsCount }} pending request(s)</strong>
+                    <p style="margin: 0; font-size: 12px; color: #a0aec0;">Staff members are waiting for approval.</p>
+                </div>
+                <a href="{{ route('admin.users.requests') }}" class="btn btn-primary" style="padding: 0.5rem 1rem; min-height: 38px; font-size: 12px;">
+                    Review Requests
+                </a>
+            </div>
+        </div>
+    @endif
+
+    {{-- Primary statistics (Real Data) --}}
     <section class="stats-grid" aria-label="System overview">
         <article class="card metric-card">
             <div class="metric-heading">
@@ -34,16 +47,13 @@
                     <span class="material-symbols-outlined">group</span>
                 </span>
             </div>
-
-            <div class="metric-value">126</div>
-
+            <div class="metric-value">{{ $totalUsers }}</div>
             <div class="metric-trend">
-                <span class="status status-success">+8 this month</span>
+                <span class="status status-success">Registered accounts</span>
             </div>
-
             <div class="metric-footer">
-                <span>Verified accounts</span>
-                <strong>98.2%</strong>
+                <span>Includes all roles</span>
+                <strong>System wide</strong>
             </div>
         </article>
 
@@ -54,19 +64,16 @@
                     <span class="material-symbols-outlined">apartment</span>
                 </span>
             </div>
-
-            <div class="metric-value">348</div>
-
+            <div class="metric-value">{{ $totalProperties }}</div>
             <div class="metric-trend">
-                <span class="status status-success">
+                <span class="status status-neutral">
                     <span class="status-dot"></span>
-                    14 newly active
+                    Total registered
                 </span>
             </div>
-
             <div class="metric-footer">
-                <span>Occupancy rate</span>
-                <strong>91.4%</strong>
+                <span>Across all branches</span>
+                <strong>{{ $totalBranches }} branches</strong>
             </div>
         </article>
 
@@ -77,41 +84,33 @@
                     <span class="material-symbols-outlined">badge</span>
                 </span>
             </div>
-
-            <div class="metric-value">19</div>
-
+            <div class="metric-value">{{ $totalStaff }}</div>
             <div class="metric-trend">
-                <span class="status status-neutral">3 branches</span>
+                <span class="status status-neutral">{{ $totalBranches }} branches</span>
             </div>
-
             <div class="metric-footer">
-                <span>On duty today</span>
-                <strong>16 active</strong>
+                <span>Property Specialists</span>
+                <strong>Active</strong>
             </div>
         </article>
     </section>
 
-    {{-- Client and owner summaries --}}
+    {{-- Client and owner summaries (Real Data) --}}
     <section class="registry-grid" aria-label="Client and owner registry">
         <article class="card registry-card">
             <div class="registry-heading">
                 <div>
                     <div class="metric-label">Clients</div>
-                    <div class="registry-description">
-                        Registered tenants
-                    </div>
+                    <div class="registry-description">Registered tenants</div>
                 </div>
-
                 <span class="metric-icon">
                     <span class="material-symbols-outlined">person</span>
                 </span>
             </div>
-
-            <div class="registry-value">87</div>
-
+            <div class="registry-value">{{ $totalClients }}</div>
             <div class="registry-footer">
-                <span>Lease renewals pending</span>
-                <strong class="text-warning">5 due this week</strong>
+                <span>Client portal</span>
+                <strong>Active accounts</strong>
             </div>
         </article>
 
@@ -119,125 +118,73 @@
             <div class="registry-heading">
                 <div>
                     <div class="metric-label">Property Owners</div>
-                    <div class="registry-description">
-                        Registered landlords
-                    </div>
+                    <div class="registry-description">Registered landlords</div>
                 </div>
-
                 <span class="metric-icon">
                     <span class="material-symbols-outlined">key</span>
                 </span>
             </div>
-
-            <div class="registry-value">42</div>
-
+            <div class="registry-value">{{ $totalOwners }}</div>
             <div class="registry-footer">
                 <span>Branch coverage</span>
-                <strong>All 3 branches</strong>
+                <strong>All branches</strong>
             </div>
         </article>
     </section>
 
-    {{-- Recent activity --}}
+    {{-- Recent activity (Real Data) --}}
     <section class="card activity-card">
         <div class="card-heading activity-heading">
             <div>
                 <h2 class="card-title">Recent Activity</h2>
-                <p class="card-subtitle">
-                    Recent administrative and operational events
-                </p>
+                <p class="card-subtitle">Recent administrative and operational events</p>
             </div>
-
-            <a href="{{ url('/admin/audit-logs') }}" class="text-link">
+            <a href="{{ route('admin.audit-logs.index') }}" class="text-link">
                 View all
                 <span class="material-symbols-outlined">arrow_forward</span>
             </a>
         </div>
 
-        @php
-            // Sample activity for the dashboard prototype.
-            // Replace this array with database records when audit logging is implemented.
-            $activities = [
-                [
-                    'icon' => 'person_add',
-                    'type' => 'User created',
-                    'subject' => 'Ahmed Ibrahim',
-                    'detail' => 'Malé branch',
-                    'time' => '10:32 AM',
-                    'status' => 'success',
-                ],
-                [
-                    'icon' => 'check_circle',
-                    'type' => 'Property approved',
-                    'subject' => '#PROP-1024 · Ocean View Phase 2',
-                    'detail' => 'Approved by Administrator',
-                    'time' => '10:12 AM',
-                    'status' => 'success',
-                ],
-                [
-                    'icon' => 'badge',
-                    'type' => 'Staff account created',
-                    'subject' => 'Hassan Naseem',
-                    'detail' => 'Senior Officer',
-                    'time' => '09:45 AM',
-                    'status' => 'warning',
-                ],
-                [
-                    'icon' => 'history_edu',
-                    'type' => 'Lease created',
-                    'subject' => '#LEASE-0456 · Palm Court Apt 4B',
-                    'detail' => 'Hulhumalé branch',
-                    'time' => '09:20 AM',
-                    'status' => 'neutral',
-                ],
-                [
-                    'icon' => 'payments',
-                    'type' => 'Payment verified',
-                    'subject' => '#PAY-8821 · MVR 18,000',
-                    'detail' => 'Bank transfer',
-                    'time' => '08:50 AM',
-                    'status' => 'success',
-                ],
-            ];
-        @endphp
-
         <div class="activity-list">
-            @foreach ($activities as $activity)
+            @forelse ($recentActivity as $activity)
                 <article class="activity-item">
-                    <div class="activity-icon activity-icon-{{ $activity['status'] }}">
+                    <div class="activity-icon activity-icon-{{ str_contains($activity->action, 'DELETE') ? 'warning' : (str_contains($activity->action, 'LOGIN') ? 'success' : 'neutral') }}">
                         <span class="material-symbols-outlined">
-                            {{ $activity['icon'] }}
+                            {{ str_contains($activity->action, 'USER') ? 'person_add' : (str_contains($activity->action, 'LOGIN') ? 'login' : 'info') }}
                         </span>
                     </div>
 
                     <div class="activity-details">
                         <div class="activity-title">
-                            <strong>{{ $activity['type'] }}</strong>
+                            <strong>{{ str_replace('_', ' ', $activity->action) }}</strong>
                             <span class="activity-separator">·</span>
-                            <span>{{ $activity['subject'] }}</span>
+                            <span>{{ $activity->actor?->name ?? 'System' }}</span>
                         </div>
-
-                        <p>{{ $activity['detail'] }}</p>
+                        <p>{{ $activity->description }}</p>
                     </div>
 
                     <time class="activity-time">
-                        {{ $activity['time'] }}
+                        {{ $activity->created_at->diffForHumans() }}
                     </time>
                 </article>
-            @endforeach
+            @empty
+                <div style="padding: 2rem; text-align: center; color: var(--text-muted);">
+                    No activity yet. Actions will appear here as they happen.
+                </div>
+            @endforelse
         </div>
 
         <div class="activity-footer">
-            <span>Showing the latest 5 sample events</span>
-
+            <span>Showing the latest 5 events</span>
             <span class="live-indicator">
                 <span class="status-dot"></span>
-                Sample activity
+                Live from Audit Log
             </span>
         </div>
     </section>
 
     <style>
+        /* ... (Keep all your existing CSS from your pasted file here) ... */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -538,12 +485,10 @@
     @push('scripts')
         <script>
             document.getElementById('newEntryButton')?.addEventListener('click', () => {
-                // Replace with a route or entry-selection modal when implemented.
                 window.location.href = "{{ url('/admin/users/create') }}";
             });
 
             document.getElementById('exportReport')?.addEventListener('click', () => {
-                // Connect to a server-generated CSV/PDF report endpoint.
                 window.alert('Report export has not been connected yet.');
             });
         </script>

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Str;
 use Illuminate\Validation\Rules\Password as PasswordRule;
 use Illuminate\Validation\ValidationException;
+use App\Models\Entity\AuditLog;
 
 class LoginController extends Controller
 {
@@ -43,6 +44,17 @@ class LoginController extends Controller
         //This validates credentials WITHOUT logging them in.
         if (! Auth::once($credentials)) {
             RateLimiter::hit($throttleKey, 60);
+
+            //Audit Log: Failed Login (actor_id is null because they're not authenticated)
+            AuditLog::create([
+                'actor_id' => null,
+                'action' => 'FAILED_LOGIN',
+                'entity_type' => 'User',
+                'entity_id' => null,
+                'description' => "Failed login attempt for {$credentials['email']}.",
+                'ip_address' => request()->ip(),
+            ]);
+
             throw ValidationException::withMessages([
                 'email' => __('These credentials do not match our records.'),
             ]);
@@ -61,6 +73,16 @@ class LoginController extends Controller
 
         // Status check
         if ($user->status !== 'active') {
+            //Audit Log: Blocked Suspended Account
+            AuditLog::create([
+                'actor_id' => $user->id,
+                'action' => 'BLOCKED_LOGIN',
+                'entity_type' => 'User',
+                'entity_id' => $user->id,
+                'description' => "{$user->name} attempted to log in but the account is {$user->status}.",
+                'ip_address' => request()->ip(),
+            ]);
+
             throw ValidationException::withMessages([
                 'email' => "Your account is currently {$user->status}. Please contact support.",
             ]);
@@ -82,7 +104,7 @@ class LoginController extends Controller
                 fn ($message) => $message->to($user->email)->subject('Your Login Code')
             );
 
-            // 🆕 Save user ID and remember choice in session (no Auth::logout needed!)
+            //Save user ID and remember choice in session (no Auth::logout needed!)
             $request->session()->put('mfa_user_id', $user->id);
             $request->session()->put('mfa_remember', $request->boolean('remember'));
 
@@ -93,11 +115,33 @@ class LoginController extends Controller
         Auth::login($user, $request->boolean('remember'));
         $request->session()->regenerate();
 
+        //Audit Log: Successful Login (no MFA)
+        AuditLog::create([
+            'actor_id' => $user->id,
+            'action' => 'LOGIN',
+            'entity_type' => 'User',
+            'entity_id' => $user->id,
+            'description' => "{$user->name} logged in successfully.",
+            'ip_address' => request()->ip(),
+        ]);
+
         return redirect()->intended(route($user->dashboardRoute()));
     }
 
     public function destroy(Request $request)
     {
+        //Audit Log: Logout (before logout so we still have the user's info)
+        if (auth()->check()) {
+            AuditLog::create([
+                'actor_id' => auth()->id(),
+                'action' => 'LOGOUT',
+                'entity_type' => 'User',
+                'entity_id' => auth()->id(),
+                'description' => auth()->user()->name . ' logged out.',
+                'ip_address' => request()->ip(),
+            ]);
+        }
+
         Auth::logout();
         $request->session()->invalidate();
         $request->session()->regenerateToken();
@@ -141,6 +185,16 @@ class LoginController extends Controller
                 ])->setRememberToken(Str::random(60));
 
                 $user->save();
+
+                //Audit Log:Password Reset via Email Link
+                AuditLog::create([
+                    'actor_id' => $user->id,
+                    'action' => 'RESET_PASSWORD_VIA_EMAIL',
+                    'entity_type' => 'User',
+                    'entity_id' => $user->id,
+                    'description' => "{$user->name} reset their password via email link.",
+                    'ip_address' => request()->ip(),
+                ]);
             }
         );
 

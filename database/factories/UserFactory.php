@@ -13,16 +13,8 @@ use Illuminate\Support\Str;
  */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
     protected static ?string $password;
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
     public function definition(): array
     {
         return [
@@ -37,9 +29,7 @@ class UserFactory extends Factory
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
+    // email unverified
     public function unverified(): static
     {
         return $this->state(fn (array $attributes) => [
@@ -47,13 +37,51 @@ class UserFactory extends Factory
         ]);
     }
 
-    /**
-     * Indicate that the model has MFA enabled.
-     */
+    // mfa enabled
     public function mfaEnabled(): static
     {
         return $this->state(fn (array $attributes) => [
             'mfa_enabled' => true,
+        ]);
+    }
+
+    // admin role
+    public function admin(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRoles::ADMIN,
+        ]);
+    }
+
+    // staff role
+    public function staff(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRoles::STAFF,
+        ]);
+    }
+
+    // branch manager role
+    public function branchManager(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRoles::BRANCH_MANAGER,
+        ]);
+    }
+
+    // receptionist role
+    public function receptionist(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRoles::RECEPTIONIST,
+        ]);
+    }
+
+    // property owner role
+    public function propertyOwner(): static
+    {
+        return $this->state(fn (array $attributes) => [
+            'role' => UserRoles::PROPERTY_OWNER,
         ]);
     }
 }
