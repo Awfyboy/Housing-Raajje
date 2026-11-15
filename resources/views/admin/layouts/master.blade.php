@@ -735,12 +735,6 @@
                     <span class="material-symbols-outlined">cloud_sync</span>
                     Backups
                 </a>
-
-                <a href="{{ url('/admin/settings') }}"
-                   class="nav-link @if(request()->is('admin/settings*')) active @endif">
-                    <span class="material-symbols-outlined">settings</span>
-                    Settings
-                </a>
             </div>
         </nav>
     </aside>

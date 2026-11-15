@@ -735,12 +735,6 @@
                     Maintenance
                 </a>
 
-                <a href="{{ url('/branch-manager/disputes-escalations') }}"
-                   class="nav-link @if(request()->is('branch-manager/disputes-escalations*')) active @endif">
-                    <span class="material-symbols-outlined">gavel</span>
-                    Disputes & Escalations
-                </a>
-
                 <a href="{{ url('/branch-manager/reports') }}"
                    class="nav-link @if(request()->is('branch-manager/reports*')) active @endif">
                     <span class="material-symbols-outlined">assessment</span>
@@ -748,6 +742,15 @@
                 </a>
             </div>
 
+            <div class="nav-group">
+                <span class="nav-heading">Support</span>
+
+                <a href="{{ url('/branch-manager/support') }}"
+                   class="nav-link @if(request()->is('branch-manager/support*')) active @endif">
+                    <span class="material-symbols-outlined">support</span>
+                    Support & Escalations
+                </a>
+            </div>
 
         </nav>
     </aside>

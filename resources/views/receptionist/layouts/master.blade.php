@@ -726,18 +726,6 @@
                     <span class="material-symbols-outlined">support</span>
                     Support Requests
                 </a>
-
-                <a href="{{ url('/receptionist/messages') }}"
-                   class="nav-link @if(request()->is('receptionist/messages*')) active @endif">
-                    <span class="material-symbols-outlined">message</span>
-                    Messages
-                </a>
-
-                <a href="{{ url('/receptionist/notifications') }}"
-                   class="nav-link @if(request()->is('receptionist/notifications*')) active @endif">
-                    <span class="material-symbols-outlined">notifications</span>
-                    Notifications
-                </a>
             </div>
         </nav>
     </aside>
