@@ -20,7 +20,6 @@ class BranchController extends Controller
         $branches = Branch::query()
             ->with('manager')
             ->when($search, function ($query, $search) {
-                // Search by name only (location is an enum, not a string)
                 return $query->where('name', 'like', "%{$search}%");
             })
             ->orderBy('name')
@@ -32,14 +31,16 @@ class BranchController extends Controller
 
     public function create()
     {
-        // Only users with the BRANCH_MANAGER role can be assigned as managers
+        // Only unassigned Branch Managers can be picked
         $managers = User::where('role', UserRoles::BRANCH_MANAGER)
             ->whereNull('branch_id')
             ->orderBy('name')
             ->get();
 
-        // Enum values for the location dropdown
-        $locations = BranchLocations::cases();
+        // Available islands (those that don't have a branch yet)
+        $locations = array_filter(BranchLocations::cases(), function ($location) {
+            return ! Branch::where('location', $location->value)->exists();
+        });
 
         return view('admin.branches.create', compact('managers', 'locations'));
     }
@@ -48,14 +49,13 @@ class BranchController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:branches,name'],
-            'location' => ['required', Rule::enum(BranchLocations::class)],
+            'location' => ['required', Rule::enum(BranchLocations::class), Rule::unique('branches', 'location')], // one branch per island
             'address' => ['nullable', 'string', 'max:255'],
             'manager_id' => ['nullable', 'exists:users,id'],
         ]);
 
         $branch = Branch::create($data);
 
-        // Two-way sync: Update the manager's branch_id
         if ($branch->manager_id) {
             User::where('id', $branch->manager_id)->update(['branch_id' => $branch->id]);
         }
@@ -76,7 +76,7 @@ class BranchController extends Controller
 
     public function edit(Branch $branch)
     {
-        // Show unassigned managers, PLUS the current manager (if any)
+        // Show unassigned managers + the current manager
         $managers = User::where('role', UserRoles::BRANCH_MANAGER)
             ->where(function ($query) use ($branch) {
                 $query->whereNull('branch_id')
@@ -94,19 +94,34 @@ class BranchController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('branches')->ignore($branch->id)],
-            'location' => ['required', Rule::enum(BranchLocations::class)],
+            'location' => ['required', Rule::enum(BranchLocations::class), Rule::unique('branches', 'location')->ignore($branch->id)], // one branch per island
             'address' => ['nullable', 'string', 'max:255'],
             'manager_id' => ['nullable', 'exists:users,id'],
         ]);
 
-        // Handle manager change (free old manager, assign new one)
+        // Handle manager replacement with a clear audit log
         if ($branch->manager_id !== $data['manager_id']) {
-            if ($branch->manager_id) {
-                User::where('id', $branch->manager_id)->update(['branch_id' => null]);
+            $oldManagerId = $branch->manager_id;
+            $oldManagerName = $oldManagerId ? User::find($oldManagerId)?->name : 'none';
+
+            if ($oldManagerId) {
+                User::where('id', $oldManagerId)->update(['branch_id' => null]);
             }
+
+            $newManagerName = 'none';
             if ($data['manager_id']) {
                 User::where('id', $data['manager_id'])->update(['branch_id' => $branch->id]);
+                $newManagerName = User::find($data['manager_id'])?->name;
             }
+
+            AuditLog::create([
+                'actor_id' => auth()->id(),
+                'action' => 'REPLACE_BRANCH_MANAGER',
+                'entity_type' => 'Branch',
+                'entity_id' => $branch->id,
+                'description' => "Replaced manager of {$branch->name}: {$oldManagerName} → {$newManagerName}.",
+                'ip_address' => request()->ip(),
+            ]);
         }
 
         $branch->update($data);
@@ -127,16 +142,13 @@ class BranchController extends Controller
 
     public function destroy(Branch $branch)
     {
-        // 🛡️ SAFETY RULE: Cannot delete a branch that has users or properties
+        // Cannot delete if users are assigned
         if ($branch->users()->count() > 0) {
             return back()->withErrors(['branch' => 'Cannot delete this branch because it has staff/users assigned. Reassign them first.']);
         }
-        
-        // Future safety: if ($branch->properties()->count() > 0) { ... }
 
         $name = $branch->name;
 
-        // Audit Log: Branch Deleted
         AuditLog::create([
             'actor_id' => auth()->id(),
             'action' => 'DELETE_BRANCH',

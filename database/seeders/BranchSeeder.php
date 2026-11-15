@@ -12,29 +12,19 @@ class BranchSeeder extends Seeder
     {
         $branches = [
             [
-                'name' => 'Malé Central Branch',
+                'name' => 'Malé Branch',
                 'location' => BranchLocations::MALE,
-                'address' => 'Henveiru District, Boduthakurufaanu Magu, 20026',
+                'address' => 'Henveiru District, Boduthakurufaanu Magu, 20026, Malé',
             ],
             [
-                'name' => 'Malé West Branch',
-                'location' => BranchLocations::MALE,
-                'address' => 'Maafannu District, Chaandhanee Magu, 20063',
-            ],
-            [
-                'name' => 'Hulhumalé Phase 1 Branch',
+                'name' => 'Hulhumalé Branch',
                 'location' => BranchLocations::HULHUMALE,
-                'address' => 'Phase 1, Medhu Goalhi, Lot 11122, 23000',
-            ],
-            [
-                'name' => 'Hulhumalé Phase 2 Branch',
-                'location' => BranchLocations::HULHUMALE,
-                'address' => 'Phase 2, Neeloafaru Magu, Lot 11483, 21000',
+                'address' => 'Phase 1, Medhu Goalhi, 23000, Hulhumalé',
             ],
             [
                 'name' => 'Villingili Branch',
                 'location' => BranchLocations::VILLINGILI,
-                'address' => 'Ameer Ahmed Magu, Goalhi 5, 21000',
+                'address' => 'Ameer Ahmed Magu, Goalhi 5, 21000, Villingili',
             ],
         ];
 

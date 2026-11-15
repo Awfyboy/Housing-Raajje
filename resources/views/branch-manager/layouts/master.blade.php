@@ -657,7 +657,7 @@
 </head>
 <body>
     <aside class="admin-sidebar" id="adminSidebar">
-        <a href="{{ url('/branch-manager/dashboard') }}" class="sidebar-brand">
+        <a href="{{ route('branch-manager.dashboard') }}" class="sidebar-brand">
             <span class="brand-name">Housing 4 Raajje</span>
             <span class="brand-role">BRANCH MANAGER</span>
         </a>
@@ -666,9 +666,9 @@
             <div class="nav-group">
                 <span class="nav-heading">Main</span>
 
-                <a href="{{ url('/branch-manager/dashboard') }}"
-                   class="nav-link @if(request()->is('branch-manager/dashboard')) active @endif"
-                   @if(request()->is('branch-manager/dashboard')) aria-current="page" @endif>
+                <a href="{{ route('branch-manager.dashboard') }}"
+                   class="nav-link @if(request()->routeIs('branch-manager.dashboard')) active @endif"
+                   @if(request()->routeIs('branch-manager.dashboard')) aria-current="page" @endif>
                     <span class="material-symbols-outlined">grid_view</span>
                     Dashboard
                 </a>
@@ -677,14 +677,14 @@
             <div class="nav-group">
                 <span class="nav-heading">Branch Management</span>
 
-                <a href="{{ url('/branch-manager/staff-management') }}"
-                   class="nav-link @if(request()->is('branch-manager/staff-management*')) active @endif">
+                <a href="{{ route('branch-manager.staff.index') }}"
+                   class="nav-link @if(request()->routeIs('branch-manager.staff.*')) active @endif">
                     <span class="material-symbols-outlined">group</span>
                     Staff Management
                 </a>
 
-                <a href="{{ url('/branch-manager/clients-owners') }}"
-                   class="nav-link @if(request()->is('branch-manager/clients-owners*')) active @endif">
+                <a href="{{ route('branch-manager.clients-owners.index') }}"
+                   class="nav-link @if(request()->routeIs('branch-manager.clients-owners.*')) active @endif">
                     <span class="material-symbols-outlined">people</span>
                     Clients & Owners
                 </a>
@@ -824,7 +824,7 @@
 
                         <div class="dropdown-divider"></div>
 
-                        <form method="POST" action="{{ url('/logout') }}">
+                        <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item dropdown-item-danger" role="menuitem">
                                 <span class="material-symbols-outlined">logout</span>

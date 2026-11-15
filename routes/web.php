@@ -81,7 +81,7 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
 
 //Authenticated/Protected Routes (only logged in AND verified users)
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Universal Profile Routes
+    //Universal Profile Routes
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
@@ -90,21 +90,29 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/profile/email/verify/{token}', [ProfileController::class, 'verifyEmailChange'])->name('profile.email.verify');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    // Client
+    //Client
     Route::view('/client/home', 'client.home')->name('client.dashboard'); 
     Route::view('/client/properties', 'client.properties.index')->name('client.properties');
 
-    // Owner
+    //Owner
     Route::view('/owner/dashboard', 'owner.dashboard')->name('owner.dashboard');
 
-    // Staff
+    //Staff
     Route::view('/staff/dashboard', 'staff.dashboard')->name('staff.dashboard');
 
-    // Receptionist
+    //Receptionist
     Route::view('/receptionist/dashboard', 'receptionist.dashboard')->name('receptionist.dashboard');
 
-    // Branch Manager
-    Route::view('/branch-manager/dashboard', 'branch-manager.dashboard')->name('branch-manager.dashboard');
+    //Branch Manager
+    Route::prefix('branch-manager')->name('branch-manager.')->group(function () {
+        Route::view('/dashboard', 'branch-manager.dashboard')->name('dashboard');
+
+        //Staff Management
+        Route::view('/staff', 'branch-manager.staff.index')->name('staff.index');
+
+        //Clients & Owners
+        Route::view('/clients-owners', 'branch-manager.clients-owners.index')->name('clients-owners.index');
+    });
 
     // Admin Dashboard
     Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard'); 
