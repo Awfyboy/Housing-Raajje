@@ -16,10 +16,10 @@ return new class extends Migration
                 ->constrained('users')
                 ->cascadeOnDelete();
 
-            $table->string('national_id')->unique();
-            $table->string('bank_account');
+            $table->string('national_id')->nullable()->unique();
+            $table->string('bank_account')->nullable();
             $table->boolean('verified_phone')->default(false);
-            $table->text('address');
+            $table->text('address')->nullable();
 
             $table->timestamps();
         });

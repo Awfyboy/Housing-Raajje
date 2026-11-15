@@ -1,23 +1,19 @@
 <?php
 
-namespace App\Models\Entity;
+namespace App\Models;
 
-use App\Models\User;
+use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Admin extends Model
+#[Fillable(['user_id', 'code', 'purpose', 'expires_at', 'used_at'])]
+class MfaToken extends Model
 {
-    protected $fillable = [
-        'user_id',
-        'employee_number',
-        'appointed_at',
-    ];
-
     protected function casts(): array
     {
         return [
-            'appointed_at' => 'date',
+            'expires_at' => 'datetime',
+            'used_at'    => 'datetime',
         ];
     }
 

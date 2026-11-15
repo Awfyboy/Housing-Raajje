@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Enums\UserRole;
-use App\Models\Entity\Admin;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Enums\UserRoles;
+use App\Models\Entity\Admin;  
 use App\Models\Entity\Branch;
 use App\Models\Entity\BranchManager;
 use App\Models\Entity\Client;
@@ -37,7 +37,7 @@ use Illuminate\Notifications\Notifiable;
     'status',
 ])]
 #[Hidden(['password', 'remember_token'])]
-class User extends Authenticatable
+class User extends Authenticatable implements MustVerifyEmail   
 {
     /** @use HasFactory<UserFactory> */
     use HasFactory, Notifiable;
@@ -47,9 +47,22 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
-            'role' => UserRole::class,
+            'role' => UserRoles::class,
             'mfa_enabled' => 'boolean',
         ];
+    }
+
+    public function dashboardRoute(): string
+    {
+        return match ($this->role) {
+            UserRoles::ADMIN            => 'admin.dashboard',
+            UserRoles::BRANCH_MANAGER   => 'branch-manager.dashboard',
+            UserRoles::STAFF            => 'staff.dashboard',
+            UserRoles::RECEPTIONIST     => 'receptionist.dashboard',
+            UserRoles::PROPERTY_OWNER   => 'owner.dashboard',
+            UserRoles::CLIENT           => 'client.dashboard',
+            default                     => 'home',
+        };
     }
 
     public function branch(): BelongsTo
@@ -85,6 +98,11 @@ class User extends Authenticatable
     public function clientProfile(): HasOne
     {
         return $this->hasOne(Client::class);
+    }
+
+    public function mfaTokens(): HasMany
+    {
+        return $this->hasMany(MfaToken::class);
     }
 
     public function sentMessages(): HasMany

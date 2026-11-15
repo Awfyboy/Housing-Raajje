@@ -6,19 +6,23 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
-class Receptionist extends Model
+class BranchManager extends Model
 {
+    public const STATUS_ACTIVE = 'active';
+    public const STATUS_ON_LEAVE = 'on_leave';
+    public const STATUS_INACTIVE = 'inactive';
+
     protected $fillable = [
         'user_id',
         'employee_number',
-        'hired_at',
+        'appointed_at',
         'employment_status',
     ];
 
     protected function casts(): array
     {
         return [
-            'hired_at' => 'date',
+            'appointed_at' => 'date',
         ];
     }
 

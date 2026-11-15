@@ -2,7 +2,7 @@
 
 namespace App\Enums;
 
-enum UserRole: string
+enum UserRoles: string
 {
     case ADMIN = 'admin';
     case BRANCH_MANAGER = 'branch_manager';
