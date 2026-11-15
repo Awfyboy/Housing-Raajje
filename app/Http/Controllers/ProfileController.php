@@ -97,7 +97,7 @@ class ProfileController extends Controller
             UserRoles::STAFF,
             UserRoles::RECEPTIONIST,
         ])) {
-            // 🆕 Check for existing pending request (prevents overwriting)
+            // Check for existing pending request (prevents overwriting)
             if ($user->admin_request_status === 'pending') {
                 return back()->withErrors([
                     'password' => 'You already have a pending request. Please wait for the admin to review it before submitting another.'
