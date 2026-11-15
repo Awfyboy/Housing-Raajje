@@ -39,6 +39,7 @@
 
         h1, h2, h3, .font-display {
             font-family: "Manrope", sans-serif;
+            font-weight: 800;
         }
 
         /* --- BARE BONES HEADER --- */
