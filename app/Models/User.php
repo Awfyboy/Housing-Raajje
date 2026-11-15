@@ -41,6 +41,7 @@ use Illuminate\Notifications\Notifiable;
     'admin_request_type',
     'admin_request_note',
     'admin_request_status',
+    'email_verified_at',
 ])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable implements MustVerifyEmail   
