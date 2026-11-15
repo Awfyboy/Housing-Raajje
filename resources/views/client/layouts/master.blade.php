@@ -261,7 +261,6 @@
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow">
                                 <li><a class="dropdown-item" href="{{ route('profile.edit') }}">My profile</a></li>
-                                <li><a class="dropdown-item" href="{{ url('/client/settings') }}">Preferences &amp; security</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
                                     <form method="POST" action="{{ route('logout') }}">

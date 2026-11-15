@@ -205,8 +205,13 @@
                     </button>
                 </form>
             </div>
+            
 
             {{--MFA TOGGLE--}}
+            @if (
+                auth()->user()->role === \App\Enums\UserRoles::CLIENT ||
+                auth()->user()->role === \App\Enums\UserRoles::PROPERTY_OWNER
+            )
             <div class="border-top pt-4 mt-5">
                 <h5 class="font-display mb-3">Security</h5>
 
@@ -224,6 +229,7 @@
                     </form>
                 </div>
             </div>
+            @endif
 
             {{--CHANGE EMAIL--}}
             <div class="border-top pt-4 mt-5">

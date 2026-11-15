@@ -802,11 +802,6 @@
                             My profile
                         </a>
 
-                        <a href="{{ url('/branch-manager/settings') }}" class="dropdown-item" role="menuitem">
-                            <span class="material-symbols-outlined">settings</span>
-                            Settings
-                        </a>
-
                         <div class="dropdown-divider"></div>
 
                         <form method="POST" action="{{ route('logout') }}">

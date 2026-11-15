@@ -697,11 +697,6 @@
                                     My profile
                                 </a>
                             </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ url('/owner/settings') }}">
-                                    Settings
-                                </a>
-                            </li>
                             <li><hr class="dropdown-divider"></li>
                             <li>
                                 <form method="POST" action="{{ url('/logout') }}">
