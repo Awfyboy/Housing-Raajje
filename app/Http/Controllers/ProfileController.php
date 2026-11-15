@@ -35,7 +35,7 @@ class ProfileController extends Controller
 
         // 3. Handle role-specific fields
         if ($user->role === UserRoles::CLIENT) {
-            // 🆕 Validate Client fields
+            // Validate Client fields
             $clientData = $request->validate([
                 'gender' => ['nullable', 'string', 'in:male,female,other'],
                 'date_of_birth' => ['nullable', 'date'],
@@ -53,7 +53,7 @@ class ProfileController extends Controller
                 ])
             );
         } elseif ($user->role === UserRoles::PROPERTY_OWNER) {
-            // 🆕 Validate Owner fields
+            // Validate Owner fields
             $ownerData = $request->validate([
                 'national_id' => ['nullable', 'string', 'max:255'],
                 'bank_account' => ['nullable', 'string', 'max:255'],
