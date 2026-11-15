@@ -177,7 +177,6 @@ class ProfileController extends Controller
 
         //Staff roles require admin approval
         if (in_array($user->role, [
-            UserRoles::ADMIN,
             UserRoles::BRANCH_MANAGER,
             UserRoles::STAFF,
             UserRoles::RECEPTIONIST,
@@ -206,6 +205,24 @@ class ProfileController extends Controller
             ]);
 
             return back()->with('admin_request_sent', 'email');
+        }
+
+        //Admin: update email directly (no admin approval required)
+        if ($user->role === UserRoles::ADMIN) {
+            $user->email = $request->new_email;
+            $user->save();
+
+            //Audit Log: Email Changed
+            AuditLog::create([
+                'actor_id' => $user->id,
+                'action' => 'CHANGE_EMAIL',
+                'entity_type' => 'User',
+                'entity_id' => $user->id,
+                'description' => "{$user->name} changed their email to {$request->new_email}.",
+                'ip_address' => request()->ip(),
+            ]);
+
+            return back()->with('status', 'Email updated successfully!');
         }
 
         //Client/Owner: send verification link

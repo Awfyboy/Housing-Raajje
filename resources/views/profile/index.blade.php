@@ -200,7 +200,7 @@
                                style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #ddd;">
                     </div>
 
-                    <button type="submit" class="btn btn-hr w-100" style="padding: 0.75rem; border-radius: 0.5rem; background: #432d24; color: #fff; font-weight: 800; border: 0; cursor: pointer;">
+                    <button type="submit" class="btn btn-hr w-100" style="padding: 0.75rem; border-radius: 0.5rem; @if(auth()->user()->role === \App\Enums\UserRoles::ADMIN) background: #00875f; @else background: #432d24; @endif color: #fff; font-weight: 800; border: 0; cursor: pointer;">
                         Update Password
                     </button>
                 </form>
@@ -254,13 +254,19 @@
                                style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #ddd;">
                     </div>
 
-                    <button type="submit" class="btn btn-hr w-100" style="padding: 0.75rem; border-radius: 0.5rem; background: #432d24; color: #fff; font-weight: 800; border: 0; cursor: pointer;">
-                        Request Email Change
+                    <button type="submit" class="btn btn-hr w-100" style="padding: 0.75rem; border-radius: 0.5rem; @if(auth()->user()->role === \App\Enums\UserRoles::ADMIN) background: #00875f; @else background: #432d24; @endif color: #fff; font-weight: 800; border: 0; cursor: pointer;">
+                        @if(auth()->user()->role === \App\Enums\UserRoles::ADMIN)
+                            Update Email
+                        @else
+                            Request Email Change
+                        @endif
                     </button>
                 </form>
             </div>
             {{--DELETE ACCOUNT--}}
+            @if(auth()->user()->role !== \App\Enums\UserRoles::ADMIN)
             <div class="border-top pt-4 mt-5 mb-5">
+            
                 <h5 class="font-display mb-3" style="color: #ba1a1a;">Danger Zone</h5>
                 <p class="small text-muted">Once you delete your account, all your data will be permanently removed. This action cannot be undone.</p>
 
@@ -279,7 +285,7 @@
                     </button>
                 </form>
             </div>
-
+            @endif
         </div>
     </div>
 </div>
