@@ -9,9 +9,7 @@
         <h1 class="page-title">Branch Management</h1>
         <p class="page-description">Manage the regional branches.</p>
     </div>
-    <a href="{{ route('admin.branches.create') }}" class="btn btn-primary">
-        <span class="material-symbols-outlined">add</span> Add Branch
-    </a>
+    {{--The Add Branch button has been removed--}}
 </div>
 
 @if (session('status'))

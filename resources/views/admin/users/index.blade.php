@@ -97,7 +97,30 @@
             <tbody>
                 @forelse ($users as $user)
                     <tr style="border-bottom: 1px solid #f1f4f8;">
-                        <td style="padding: 0.6rem 0.75rem; font-weight: 600; color: #151e32;">{{ $user->name }}</td>
+                        {{-- NAME COLUMN WITH EMPLOYEE ID --}}
+                        <td style="padding: 0.6rem 0.75rem;">
+                            <div style="font-weight: 600; color: #151e32; display: flex; align-items: center; gap: 6px; flex-wrap: wrap;">
+                                {{ $user->name }}
+                                
+                                {{-- Automatically pull the employee ID based on role --}}
+                                @php
+                                    $employeeId = match($user->role) {
+                                        \App\Enums\UserRoles::ADMIN => $user->admin?->employee_number,
+                                        \App\Enums\UserRoles::BRANCH_MANAGER => $user->branchManager?->employee_number,
+                                        \App\Enums\UserRoles::STAFF => $user->staffProfile?->employee_number,
+                                        \App\Enums\UserRoles::RECEPTIONIST => $user->receptionist?->employee_number,
+                                        default => null,
+                                    };
+                                @endphp
+
+                                @if($employeeId)
+                                    <span style="font-size: 9px; font-weight: 800; background: #eee5da; color: #6b4937; padding: 2px 6px; border-radius: 4px; border: 1px solid #d8c3ae; white-space: nowrap;">
+                                        {{ $employeeId }}
+                                    </span>
+                                @endif
+                            </div>
+                        </td>
+
                         <td style="padding: 0.6rem 0.75rem; color: #4a5568;">{{ $user->email }}</td>
                         
                         {{-- ROLE COLUMN WITH SUPER ADMIN LOGIC --}}
