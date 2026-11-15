@@ -33,6 +33,8 @@ class UserController extends Controller
             ->count();
 
         $users = User::query()
+            // Eager load the profile relationships so the Blade view can access employee numbers
+            ->with(['admin', 'branchManager', 'staffProfile', 'receptionist'])
             ->when($search, function ($query, $search) {
                 return $query->where(function ($q) use ($search) {
                     $q->where('name', 'like', "%{$search}%")
@@ -43,22 +45,7 @@ class UserController extends Controller
                 return $query->where('role', $roleFilter);
             })
             ->when($branchFilter, function ($query, $branchId) {
-                //Currently only filters internal staff (Manager, Staff, Receptionist)
                 $query->where('branch_id', $branchId);
-                
-                /*
-                | TODO_PROPERTIES: Uncomment when Property & Application models exist
-                | This will allow filtering Clients and Owners by the branch of
-                | their related properties/applications.
-                |
-                | $query->orWhereHas('ownerProfile.properties', function ($prop) use ($branchId) {
-                |     $prop->where('branch_id', $branchId);
-                | });
-                |
-                | $query->orWhereHas('clientProfile.applications.property', function ($prop) use ($branchId) {
-                |     $prop->where('branch_id', $branchId);
-                | });
-                */
             })
             ->orderBy('name')
             ->paginate(10)
@@ -108,7 +95,7 @@ class UserController extends Controller
             'password' => ['required', 'string', 'min:8'],
             'role' => ['required', 'in:staff,receptionist,branch_manager,client,property_owner,admin'],
             'branch_id' => [$isStaffRole ? 'required' : 'nullable', 'exists:branches,id'],
-            'employee_number' => [$isStaffRole ? 'required' : 'nullable', 'string', 'max:50'],
+            // Removed employee_number from validation
         ]);
 
         $user = User::create([
@@ -122,28 +109,42 @@ class UserController extends Controller
             'email_verified_at' => now(),
         ]);
 
+        // --- AUTO-GENERATE EMPLOYEE ID ---
+        // Function to find the lowest available number
+        $generateId = function ($model, $prefix) {
+            $existingIds = $model::pluck('employee_number')->toArray();
+            $counter = 1;
+            
+            // Loop until we find an ID that doesn't exist
+            while (in_array($prefix . str_pad($counter, 3, '0', STR_PAD_LEFT), $existingIds)) {
+                $counter++;
+            }
+            
+            return $prefix . str_pad($counter, 3, '0', STR_PAD_LEFT);
+        };
+
         match ($user->role) {
             UserRoles::ADMIN => Admin::create([
                 'user_id' => $user->id,
-                'employee_number' => $data['employee_number'] ?? 'ADM-' . str_pad(Admin::max('id') + 1, 3, '0', STR_PAD_LEFT),
+                'employee_number' => $generateId(Admin::class, 'ADM'),
                 'appointed_at' => now(),
                 'employment_status' => 'active',
             ]),
             UserRoles::BRANCH_MANAGER => BranchManager::create([
                 'user_id' => $user->id,
-                'employee_number' => $data['employee_number'],
+                'employee_number' => $generateId(BranchManager::class, 'BM'),
                 'appointed_at' => now(),
                 'employment_status' => 'active',
             ]),
             UserRoles::STAFF => Staff::create([
                 'user_id' => $user->id,
-                'employee_number' => $data['employee_number'],
+                'employee_number' => $generateId(Staff::class, 'STF'),
                 'hired_at' => now(),
                 'employment_status' => 'active',
             ]),
             UserRoles::RECEPTIONIST => Receptionist::create([
                 'user_id' => $user->id,
-                'employee_number' => $data['employee_number'],
+                'employee_number' => $generateId(Receptionist::class, 'REC'),
                 'hired_at' => now(),
                 'employment_status' => 'active',
             ]),
@@ -255,7 +256,6 @@ class UserController extends Controller
             return back()->withErrors(['user' => 'You cannot suspend your own account.']);
         }
 
-        //Super Admin cannot be suspended
         if ($user->id === self::SUPER_ADMIN_ID) {
             return back()->withErrors(['user' => 'The Super Admin cannot be suspended.']);
         }
@@ -264,14 +264,20 @@ class UserController extends Controller
             return back()->withErrors(['user' => 'You cannot suspend another admin.']);
         }
 
+        // 1. Update user status
         $user->update([
-        'status' => 'suspended',
-        'admin_request_type' => null,
-        'admin_request_note' => null,
-        'admin_request_status' => null,
+            'status' => 'suspended',
+            'admin_request_type' => null,
+            'admin_request_note' => null,
+            'admin_request_status' => null,
         ]);
 
-        //Audit Log: Suspend
+        // 2. IF BRANCH MANAGER: Unassign them from the branch so the slot opens up!
+        if ($user->role === UserRoles::BRANCH_MANAGER) {
+            Branch::where('manager_id', $user->id)->update(['manager_id' => null]);
+            $user->update(['branch_id' => null]);
+        }
+
         AuditLog::create([
             'actor_id' => auth()->id(),
             'action' => 'SUSPEND_USER',

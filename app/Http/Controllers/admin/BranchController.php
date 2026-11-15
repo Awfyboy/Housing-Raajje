@@ -31,9 +31,9 @@ class BranchController extends Controller
 
     public function create()
     {
-        // Only unassigned Branch Managers can be picked
+        // Get ALL active branch managers (not just unassigned)
         $managers = User::where('role', UserRoles::BRANCH_MANAGER)
-            ->whereNull('branch_id')
+            ->where('status', 'active')
             ->orderBy('name')
             ->get();
 
@@ -49,7 +49,7 @@ class BranchController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255', 'unique:branches,name'],
-            'location' => ['required', Rule::enum(BranchLocations::class), Rule::unique('branches', 'location')], // one branch per island
+            'location' => ['required', Rule::enum(BranchLocations::class), Rule::unique('branches', 'location')],
             'address' => ['nullable', 'string', 'max:255'],
             'manager_id' => ['nullable', 'exists:users,id'],
         ]);
@@ -60,7 +60,6 @@ class BranchController extends Controller
             User::where('id', $branch->manager_id)->update(['branch_id' => $branch->id]);
         }
 
-        // Audit Log: Branch Created
         AuditLog::create([
             'actor_id' => auth()->id(),
             'action' => 'CREATE_BRANCH',
@@ -76,12 +75,9 @@ class BranchController extends Controller
 
     public function edit(Branch $branch)
     {
-        // Show unassigned managers + the current manager
+        // Get ONLY active branch managers (so suspended ones don't show up)
         $managers = User::where('role', UserRoles::BRANCH_MANAGER)
-            ->where(function ($query) use ($branch) {
-                $query->whereNull('branch_id')
-                      ->orWhere('id', $branch->manager_id);
-            })
+            ->where('status', 'active')
             ->orderBy('name')
             ->get();
 
@@ -94,22 +90,23 @@ class BranchController extends Controller
     {
         $data = $request->validate([
             'name' => ['required', 'string', 'max:255', Rule::unique('branches')->ignore($branch->id)],
-            'location' => ['required', Rule::enum(BranchLocations::class), Rule::unique('branches', 'location')->ignore($branch->id)], // one branch per island
+            'location' => ['required', Rule::enum(BranchLocations::class), Rule::unique('branches', 'location')->ignore($branch->id)],
             'address' => ['nullable', 'string', 'max:255'],
             'manager_id' => ['nullable', 'exists:users,id'],
         ]);
 
-        // Handle manager replacement with a clear audit log
         if ($branch->manager_id !== $data['manager_id']) {
             $oldManagerId = $branch->manager_id;
             $oldManagerName = $oldManagerId ? User::find($oldManagerId)?->name : 'none';
 
+            // Unassign the old manager
             if ($oldManagerId) {
                 User::where('id', $oldManagerId)->update(['branch_id' => null]);
             }
 
             $newManagerName = 'none';
             if ($data['manager_id']) {
+                // Assign the new manager to this branch
                 User::where('id', $data['manager_id'])->update(['branch_id' => $branch->id]);
                 $newManagerName = User::find($data['manager_id'])?->name;
             }
@@ -126,7 +123,6 @@ class BranchController extends Controller
 
         $branch->update($data);
 
-        // Audit Log: Branch Updated
         AuditLog::create([
             'actor_id' => auth()->id(),
             'action' => 'UPDATE_BRANCH',
@@ -142,7 +138,6 @@ class BranchController extends Controller
 
     public function destroy(Branch $branch)
     {
-        // Cannot delete if users are assigned
         if ($branch->users()->count() > 0) {
             return back()->withErrors(['branch' => 'Cannot delete this branch because it has staff/users assigned. Reassign them first.']);
         }

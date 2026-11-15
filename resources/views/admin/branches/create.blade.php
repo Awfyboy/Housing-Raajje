@@ -1,7 +1,7 @@
 @extends('admin.layouts.master')
 
 @section('title', 'Add Branch')
-
+{{--This is not in use anymore--}}
 @section('content')
 <div class="page-heading">
     <div class="eyebrow">Branch Management</div>

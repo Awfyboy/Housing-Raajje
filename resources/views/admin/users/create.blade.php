@@ -58,7 +58,7 @@
             </select>
         </div>
 
-        {{-- 🆕 Staff-only fields (hidden by default) --}}
+        {{-- Staff-only fields (hidden by default) --}}
         <div id="staffFields" style="display: none; border-top: 1px solid #eee; padding-top: 1rem; margin-top: 1rem;">
             <div class="mb-3">
                 <label class="form-label fw-bold small">Assigned Branch</label>
@@ -71,11 +71,6 @@
                     @endforeach
                 </select>
             </div>
-
-            <div class="mb-3">
-                <label class="form-label fw-bold small">Employee Number</label>
-                <input type="text" name="employee_number" class="form-control" value="{{ old('employee_number') }}" placeholder="e.g., STF-004" style="width: 100%; padding: 0.75rem; border-radius: 0.5rem; border: 1px solid #ddd;">
-            </div>
         </div>
 
         <div class="mt-4">
@@ -85,7 +80,7 @@
     </form>
 </div>
 
-{{-- 🆕 JavaScript to toggle fields based on role --}}
+{{-- JavaScript to toggle fields based on role --}}
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const roleSelect = document.getElementById('roleSelect');

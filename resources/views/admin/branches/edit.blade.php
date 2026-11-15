@@ -67,6 +67,7 @@
                     </option>
                 @endforeach
             </select>
+            <small class="text-muted">If you select a manager already assigned to another branch, they will be moved to this one.</small>
         </div>
 
         <div style="display: flex; gap: 0.5rem;">
