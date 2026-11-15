@@ -9,6 +9,8 @@ use App\Http\Controllers\Admin\BranchController;
 use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
+use App\Http\Controllers\Owner\PropertyController as OwnerPropertyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -96,8 +98,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::view('/client/properties', 'client.properties.index')->name('client.properties');
 
     //Owner
-    Route::view('/owner/dashboard', 'owner.dashboard')->name('owner.dashboard');
-
+    Route::prefix('owner')->name('owner.')->group(function () {
+        Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
+        
+        // Property Management
+        Route::get('/properties', [OwnerPropertyController::class, 'index'])->name('properties.index');
+        Route::get('/properties/create', [OwnerPropertyController::class, 'create'])->name('properties.create');
+        Route::post('/properties', [OwnerPropertyController::class, 'store'])->name('properties.store');
+        Route::get('/properties/{property}', [OwnerPropertyController::class, 'show'])->name('properties.show');
+        Route::get('/properties/{property}/edit', [OwnerPropertyController::class, 'edit'])->name('properties.edit');
+        Route::put('/properties/{property}', [OwnerPropertyController::class, 'update'])->name('properties.update');
+        Route::delete('/properties/{property}', [OwnerPropertyController::class, 'destroy'])->name('properties.destroy');
+    });
     //Staff
     Route::view('/staff/dashboard', 'staff.dashboard')->name('staff.dashboard');
 
