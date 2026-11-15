@@ -26,7 +26,7 @@ class MfaController extends Controller
         $request->validate(['code' => ['required', 'string', 'digits:6']]);
 
         $userId = $request->session()->get('mfa_user_id');
-        $remember = $request->session()->get('mfa_remember', false); // 🆕 Retrieve remember choice
+        $remember = $request->session()->get('mfa_remember', false); // Retrieve remember choice
         $user   = User::find($userId);
 
         if (! $user) {

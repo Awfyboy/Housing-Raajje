@@ -82,7 +82,7 @@ class LoginController extends Controller
                 fn ($message) => $message->to($user->email)->subject('Your Login Code')
             );
 
-            // 🆕 Save user ID and remember choice in session (no Auth::logout needed!)
+            // Save user ID and remember choice in session (no Auth::logout needed!)
             $request->session()->put('mfa_user_id', $user->id);
             $request->session()->put('mfa_remember', $request->boolean('remember'));
 

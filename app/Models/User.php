@@ -52,7 +52,7 @@ class User extends Authenticatable implements MustVerifyEmail
         ];
     }
 
-    public function dashboardRoute(): string #the funny dashboard routes
+    public function dashboardRoute(): string
     {
         return match ($this->role) {
             UserRoles::ADMIN            => 'admin.dashboard',
