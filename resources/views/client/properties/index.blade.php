@@ -33,7 +33,7 @@
     .filter-control {
         min-height: 48px;
         border-color: var(--hr-border);
-        background-color: #f1e9de;
+        background-color: var(--hr-surface);
         color: var(--hr-ink);
         font-weight: 600;
     }
