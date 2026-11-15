@@ -83,7 +83,7 @@
         }
 
         h1, h2, h3 {
-            font-family: 'DM Serif Display', serif;
+            font-family: 'Manrope', sans-serif;
             font-weight: 400;
         }
 

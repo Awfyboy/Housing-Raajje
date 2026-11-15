@@ -33,7 +33,7 @@
     .filter-control {
         min-height: 48px;
         border-color: var(--hr-border);
-        background-color: #f1e9de;
+        background-color: var(--hr-surface);
         color: var(--hr-ink);
         font-weight: 600;
     }
@@ -404,7 +404,7 @@
                                 2 bedrooms · Apartment
                             </p>
 
-                            <h3 class="h5 mb-2">
+                            <h3 class="h5 fw-bold mb-2">
                                 Ocean View Residence
                             </h3>
 
@@ -465,7 +465,7 @@
                                 3 bedrooms · Apartment
                             </p>
 
-                            <h3 class="h5 mb-2">
+                            <h3 class="h5 fw-bold mb-2">
                                 Palm Court Apartment
                             </h3>
 
@@ -526,7 +526,7 @@
                                 2 bedrooms · Apartment
                             </p>
 
-                            <h3 class="h5 mb-2">
+                            <h3 class="h5 fw-bold mb-2">
                                 Ocean Breeze Apartment
                             </h3>
 
@@ -584,7 +584,7 @@
                         </div>
 
                         <div class="col-12 col-sm-8 col-lg">
-                            <h3 class="h5 mb-2">Ocean View Residence</h3>
+                            <h3 class="h5 fw-bold mb-2">Ocean View Residence</h3>
 
                             <p class="property-location mb-3">
                                 <span aria-hidden="true">📍</span>
@@ -637,7 +637,7 @@
                         </div>
 
                         <div class="col-12 col-sm-8 col-lg">
-                            <h3 class="h5 mb-2">Palm Court Apartment</h3>
+                            <h3 class="h5 fw-bold mb-2">Palm Court Apartment</h3>
 
                             <p class="property-location mb-3">
                                 <span aria-hidden="true">📍</span>
@@ -690,7 +690,7 @@
                         </div>
 
                         <div class="col-12 col-sm-8 col-lg">
-                            <h3 class="h5 mb-2">Lagoon Residence</h3>
+                            <h3 class="h5 fw-bold mb-2">Lagoon Residence</h3>
 
                             <p class="property-location mb-3">
                                 <span aria-hidden="true">📍</span>
