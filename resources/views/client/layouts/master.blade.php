@@ -36,7 +36,7 @@
         }
 
         h1, h2, h3, .font-display {
-            font-family: "DM Serif Display", serif;
+            font-family: "Manrope", sans-serif;
         }
 
         .site-header {

@@ -166,7 +166,7 @@ eg -> feat: add migration and model for leasing
 ---
 
 ### Notes
-- There are 18 users that are generated using DatabaseSeeder. Check **"database/seeders/DatabaseSeeder.php"** for some users. Use them for quickly logging in.
+- There are 18 users that are generated using DatabaseSeeder. Check **"database/seeders/DatabaseSeeder.php"** for some users. Use them for quickly logging in. The password is "Password123".
 <br>
 
 - For email verification and MFA code, check **"storage/laravel.logs"** and scroll to the bottom of the logs.
