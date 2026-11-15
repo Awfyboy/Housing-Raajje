@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Entity\AuditLog;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -52,6 +53,17 @@ class MfaController extends Controller
 
         if (! $token || ! Hash::check($request->code, $token->code)) {
             RateLimiter::hit($key, 60);
+
+            //Audit Log: Failed MFA Attempt
+            AuditLog::create([
+                'actor_id' => $user->id,
+                'action' => 'FAILED_MFA',
+                'entity_type' => 'User',
+                'entity_id' => $user->id,
+                'description' => "{$user->name} entered an invalid MFA code.",
+                'ip_address' => request()->ip(),
+            ]);
+
             throw ValidationException::withMessages([
                 'code' => 'The code is invalid or has expired.',
             ]);
@@ -67,6 +79,16 @@ class MfaController extends Controller
         // Clean up session
         $request->session()->forget(['mfa_user_id', 'mfa_remember']);
         $request->session()->regenerate();
+
+        //Audit Log:Successful Login(via MFA)
+        AuditLog::create([
+            'actor_id' => $user->id,
+            'action' => 'LOGIN',
+            'entity_type' => 'User',
+            'entity_id' => $user->id,
+            'description' => "{$user->name} logged in successfully (MFA verified).",
+            'ip_address' => request()->ip(),
+        ]);
 
         return redirect()->intended(route($user->dashboardRoute()));
     }

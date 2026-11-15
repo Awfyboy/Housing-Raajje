@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Enums\UserRoles; 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use App\Models\Entity\AuditLog;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -35,18 +36,35 @@ class RegisterController extends Controller
             ? UserRoles::PROPERTY_OWNER 
             : UserRoles::CLIENT;
 
+        //External users (Client, Owner) = false
+        //Internal users (Admin, Manager, Staff, Receptionist) = true
+        $isExternalUser = in_array($role, [
+            UserRoles::CLIENT, 
+            UserRoles::PROPERTY_OWNER
+        ]);
+
         $user = User::create([
             'name'     => $data['name'],
             'email'    => $data['email'],
             'password' => $data['password'],   
             'role'     => $role,
-            'mfa_enabled' => true
+            'mfa_enabled' => !$isExternalUser //true for staff, false for external
         ]);
 
         event(new Registered($user));
         
         Auth::login($user);
         $request->session()->regenerate();
+
+        //Audit Log:Public Registration
+        AuditLog::create([
+            'actor_id' => $user->id,
+            'action' => 'REGISTER',
+            'entity_type' => 'User',
+            'entity_id' => $user->id,
+            'description' => "{$user->name} registered as a {$user->role->label()}.",
+            'ip_address' => request()->ip(),
+        ]);
 
         return redirect()->route('verification.notice');
     }

@@ -657,7 +657,7 @@
 </head>
 <body>
     <aside class="admin-sidebar" id="adminSidebar">
-        <a href="{{ url('/branch-manager/dashboard') }}" class="sidebar-brand">
+        <a href="{{ route('branch-manager.dashboard') }}" class="sidebar-brand">
             <span class="brand-name">Housing 4 Raajje</span>
             <span class="brand-role">BRANCH MANAGER</span>
         </a>
@@ -666,9 +666,9 @@
             <div class="nav-group">
                 <span class="nav-heading">Main</span>
 
-                <a href="{{ url('/branch-manager/dashboard') }}"
-                   class="nav-link @if(request()->is('branch-manager/dashboard')) active @endif"
-                   @if(request()->is('branch-manager/dashboard')) aria-current="page" @endif>
+                <a href="{{ route('branch-manager.dashboard') }}"
+                   class="nav-link @if(request()->routeIs('branch-manager.dashboard')) active @endif"
+                   @if(request()->routeIs('branch-manager.dashboard')) aria-current="page" @endif>
                     <span class="material-symbols-outlined">grid_view</span>
                     Dashboard
                 </a>
@@ -677,14 +677,14 @@
             <div class="nav-group">
                 <span class="nav-heading">Branch Management</span>
 
-                <a href="{{ url('/branch-manager/staff-management') }}"
-                   class="nav-link @if(request()->is('branch-manager/staff-management*')) active @endif">
+                <a href="{{ route('branch-manager.staff.index') }}"
+                   class="nav-link @if(request()->routeIs('branch-manager.staff.*')) active @endif">
                     <span class="material-symbols-outlined">group</span>
                     Staff Management
                 </a>
 
-                <a href="{{ url('/branch-manager/clients-owners') }}"
-                   class="nav-link @if(request()->is('branch-manager/clients-owners*')) active @endif">
+                <a href="{{ route('branch-manager.clients-owners.index') }}"
+                   class="nav-link @if(request()->routeIs('branch-manager.clients-owners.*')) active @endif">
                     <span class="material-symbols-outlined">people</span>
                     Clients & Owners
                 </a>
@@ -735,16 +735,6 @@
                     Maintenance
                 </a>
 
-                <a href="{{ url('/branch-manager/disputes-escalations') }}"
-                   class="nav-link @if(request()->is('branch-manager/disputes-escalations*')) active @endif">
-                    <span class="material-symbols-outlined">gavel</span>
-                    Disputes & Escalations
-                </a>
-            </div>
-
-            <div class="nav-group">
-                <span class="nav-heading">Reporting</span>
-
                 <a href="{{ url('/branch-manager/reports') }}"
                    class="nav-link @if(request()->is('branch-manager/reports*')) active @endif">
                     <span class="material-symbols-outlined">assessment</span>
@@ -753,32 +743,16 @@
             </div>
 
             <div class="nav-group">
-                <span class="nav-heading">Communication</span>
+                <span class="nav-heading">Support</span>
 
-                <a href="{{ url('/branch-manager/messages') }}"
-                   class="nav-link @if(request()->is('branch-manager/messages*')) active @endif">
-                    <span class="material-symbols-outlined">message</span>
-                    Messages
-                </a>
-
-                <a href="{{ url('/branch-manager/notifications') }}"
-                   class="nav-link @if(request()->is('branch-manager/notifications*')) active @endif">
-                    <span class="material-symbols-outlined">notifications</span>
-                    Notifications
+                <a href="{{ url('/branch-manager/support') }}"
+                   class="nav-link @if(request()->is('branch-manager/support*')) active @endif">
+                    <span class="material-symbols-outlined">support</span>
+                    Support & Escalations
                 </a>
             </div>
-        </nav>
 
-        <div class="sidebar-bottom">
-            <form method="POST" action="{{ url('/logout') }}">
-                @csrf
-                <button type="submit" class="nav-link logout"
-                        style="width: 100%; border: 0; background: transparent; text-align: left;">
-                    <span class="material-symbols-outlined">logout</span>
-                    Logout
-                </button>
-            </form>
-        </div>
+        </nav>
     </aside>
 
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
@@ -823,7 +797,7 @@
                     </summary>
 
                     <div class="profile-dropdown" role="menu">
-                        <a href="{{ url('/branch-manager/profile') }}" class="dropdown-item" role="menuitem">
+                        <a href="{{ route('profile.edit') }}" class="dropdown-item" role="menuitem">
                             <span class="material-symbols-outlined">person</span>
                             My profile
                         </a>
@@ -835,7 +809,7 @@
 
                         <div class="dropdown-divider"></div>
 
-                        <form method="POST" action="{{ url('/logout') }}">
+                        <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <button type="submit" class="dropdown-item dropdown-item-danger" role="menuitem">
                                 <span class="material-symbols-outlined">logout</span>

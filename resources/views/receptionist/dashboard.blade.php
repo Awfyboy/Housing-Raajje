@@ -2,18 +2,6 @@
 
 @section('title', 'Receptionist Dashboard')
 
-@section('header-actions')
-    <button type="button" class="btn btn-secondary" id="exportReport">
-        <span class="material-symbols-outlined">file_download</span>
-        <span class="desktop-label">Export Report</span>
-    </button>
-
-    <button type="button" class="btn btn-primary" id="newEntryButton">
-        <span class="material-symbols-outlined">add</span>
-        New Entry
-    </button>
-@endsection
-
 @section('content')
     <div class="page-heading">
         <div class="eyebrow">Front Desk / Overview</div>

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -80,6 +79,15 @@
             color: var(--hr-text);
             font-family: "Manrope", sans-serif;
             -webkit-font-smoothing: antialiased;
+            
+            /* STICKY FOOTER FIX */
+            display: flex;
+            flex-direction: column;
+        }
+
+        main {
+            /* STICKY FOOTER FIX: Pushes the footer to the bottom */
+            flex: 1 0 auto;
         }
 
         h1, h2, h3, h4, h5, h6,
@@ -206,8 +214,6 @@
             color: var(--hr-background);
         }
 
-        /* Manually selected active item.
-           The underline touches the header's bottom edge. */
         .owner-navbar .nav-link.active {
             color: var(--hr-accent);
         }
@@ -503,6 +509,7 @@
            6. Footer
         ======================================== */
         .site-footer {
+            flex-shrink: 0; /* STICKY FOOTER FIX: Prevents footer from shrinking */
             border-top: 1px solid var(--hr-border-dark);
             background: var(--hr-ink);
             color: var(--hr-text-light);
@@ -608,7 +615,7 @@
 
                 <!-- Brand -->
                 <div class="d-flex align-items-center gap-3">
-                    <a class="brand" href="{{ url('/owner') }}">
+                    <a class="brand" href="{{ route('owner.dashboard') }}">
                         HOUSING <span class="brand-number">4</span> RAAJJE
                     </a>
 
@@ -686,7 +693,7 @@
 
                         <ul class="dropdown-menu dropdown-menu-end shadow mt-2">
                             <li>
-                                <a class="dropdown-item" href="{{ url('/owner/profile') }}">
+                                <a class="dropdown-item" href="{{ route('profile.edit') }}">
                                     My profile
                                 </a>
                             </li>
@@ -728,7 +735,7 @@
                             <a
                                 class="nav-link {{ trim($__env->yieldContent('activeNav')) === 'dashboard' ? 'active' : '' }}"
                                 @if (trim($__env->yieldContent('activeNav')) === 'dashboard') aria-current="page" @endif
-                                href="{{ url('/owner') }}"
+                                href="{{ route('owner.dashboard') }}"
                             >
                                 Dashboard
                             </a>
@@ -738,7 +745,7 @@
                             <a
                                 class="nav-link {{ trim($__env->yieldContent('activeNav')) === 'properties' ? 'active' : '' }}"
                                 @if (trim($__env->yieldContent('activeNav')) === 'properties') aria-current="page" @endif
-                                href="{{ url('/owner/properties') }}"
+                                href="{{ route('owner.properties.index') }}"
                             >
                                 My Properties
                             </a>
@@ -785,7 +792,7 @@
                         </li>
 
                         <li class="nav-item d-sm-none">
-                            <a class="nav-link" href="{{ url('/owner/profile') }}">
+                            <a class="nav-link" href="{{ route('profile.edit') }}">
                                 My profile
                             </a>
                         </li>

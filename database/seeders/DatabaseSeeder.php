@@ -23,34 +23,29 @@ class DatabaseSeeder extends Seeder
     {
         /*
         |--------------------------------------------------------------------------
-        | 1. Create the three branches
+        | 1. Create the branches
         |--------------------------------------------------------------------------
         */
 
         $this->call(BranchSeeder::class);
 
-        // Map each location enum value to its actual database branch ID.
+        // Map each branch NAME to its actual database branch ID.
         $branchIds = [];
 
-        foreach (BranchLocations::cases() as $location) {
-            $branch = Branch::where(
-                'location',
-                $location->value
-            )->firstOrFail();
-
-            $branchIds[$location->value] = $branch->id;
+        foreach (Branch::all() as $branch) {
+            $branchIds[$branch->name] = $branch->id;
         }
 
         /*
         |--------------------------------------------------------------------------
-        | 2. Define the 18 users
+        | 2. Define the users
         |--------------------------------------------------------------------------
         */
 
         $users = [
             // Administrators: no branch assignment.
             [
-                'name' => 'Admin One',
+                'name' => 'Admin One', //Keep this as first in the array as ID 1 would be super admin
                 'email' => 'admin1@housing4raajje.mv',
                 'phone' => '7000001',
                 'role' => UserRoles::ADMIN,
@@ -74,13 +69,13 @@ class DatabaseSeeder extends Seeder
                 'email_verified_at' => now(),
             ],
 
-            // Branch Managers: one per branch.
+            // Branch Managers: one per branch (3 branches = 3 managers)
             [
                 'name' => 'Branch Manager One',
                 'email' => 'bm1@housing4raajje.mv',
                 'phone' => '7000004',
                 'role' => UserRoles::BRANCH_MANAGER,
-                'branch_id' => BranchLocations::MALE,
+                'branch_name' => 'Malé Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
@@ -89,7 +84,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'bm2@housing4raajje.mv',
                 'phone' => '7000005',
                 'role' => UserRoles::BRANCH_MANAGER,
-                'branch_id' => BranchLocations::VILLINGILI,
+                'branch_name' => 'Villingili Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
@@ -98,18 +93,18 @@ class DatabaseSeeder extends Seeder
                 'email' => 'bm3@housing4raajje.mv',
                 'phone' => '7000006',
                 'role' => UserRoles::BRANCH_MANAGER,
-                'branch_id' => BranchLocations::HULHUMALE,
+                'branch_name' => 'Hulhumalé Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
 
-            // Staff: one per branch.
+            // Staff: one per branch
             [
                 'name' => 'Staff One',
                 'email' => 'staff1@housing4raajje.mv',
                 'phone' => '7000007',
                 'role' => UserRoles::STAFF,
-                'branch_id' => BranchLocations::MALE,
+                'branch_name' => 'Malé Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
@@ -118,7 +113,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'staff2@housing4raajje.mv',
                 'phone' => '7000008',
                 'role' => UserRoles::STAFF,
-                'branch_id' => BranchLocations::VILLINGILI,
+                'branch_name' => 'Villingili Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
@@ -127,18 +122,18 @@ class DatabaseSeeder extends Seeder
                 'email' => 'staff3@housing4raajje.mv',
                 'phone' => '7000009',
                 'role' => UserRoles::STAFF,
-                'branch_id' => BranchLocations::HULHUMALE,
+                'branch_name' => 'Hulhumalé Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
 
-            // Receptionists: one per branch.
+            // Receptionists: one per branch
             [
                 'name' => 'Receptionist One',
                 'email' => 'receptionist1@housing4raajje.mv',
                 'phone' => '7000010',
                 'role' => UserRoles::RECEPTIONIST,
-                'branch_id' => BranchLocations::MALE,
+                'branch_name' => 'Malé Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
@@ -147,7 +142,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'receptionist2@housing4raajje.mv',
                 'phone' => '7000011',
                 'role' => UserRoles::RECEPTIONIST,
-                'branch_id' => BranchLocations::VILLINGILI,
+                'branch_name' => 'Villingili Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
@@ -156,7 +151,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'receptionist3@housing4raajje.mv',
                 'phone' => '7000012',
                 'role' => UserRoles::RECEPTIONIST,
-                'branch_id' => BranchLocations::HULHUMALE,
+                'branch_name' => 'Hulhumalé Branch',
                 'mfa_enabled' => 1,
                 'email_verified_at' => now(),
             ],
@@ -167,7 +162,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'owner1@housing4raajje.mv',
                 'phone' => '7000013',
                 'role' => UserRoles::PROPERTY_OWNER,
-                'mfa_enabled' => 1,
+                'mfa_enabled' => 0,
                 'email_verified_at' => now(),
             ],
             [
@@ -175,7 +170,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'owner2@housing4raajje.mv',
                 'phone' => '7000014',
                 'role' => UserRoles::PROPERTY_OWNER,
-                'mfa_enabled' => 1,
+                'mfa_enabled' => 0,
                 'email_verified_at' => now(),
             ],
             [
@@ -183,7 +178,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'owner3@housing4raajje.mv',
                 'phone' => '7000015',
                 'role' => UserRoles::PROPERTY_OWNER,
-                'mfa_enabled' => 1,
+                'mfa_enabled' => 0,
                 'email_verified_at' => now(),
             ],
 
@@ -193,7 +188,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'client1@housing4raajje.mv',
                 'phone' => '7000016',
                 'role' => UserRoles::CLIENT,
-                'mfa_enabled' => 1,
+                'mfa_enabled' => 0,
                 'email_verified_at' => now(),
             ],
             [
@@ -201,7 +196,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'client2@housing4raajje.mv',
                 'phone' => '7000017',
                 'role' => UserRoles::CLIENT,
-                'mfa_enabled' => 1,
+                'mfa_enabled' => 0,
                 'email_verified_at' => now(),
             ],
             [
@@ -209,7 +204,7 @@ class DatabaseSeeder extends Seeder
                 'email' => 'client3@housing4raajje.mv',
                 'phone' => '7000018',
                 'role' => UserRoles::CLIENT,
-                'mfa_enabled' => 1,
+                'mfa_enabled' => 0,
                 'email_verified_at' => now(),
             ],
         ];
@@ -231,12 +226,10 @@ class DatabaseSeeder extends Seeder
             $role = $userData['role'];
             $roleKey = $role->value;
 
-            // Resolve the enum location to the actual branches.id value.
-            $branchId = isset($userData['branch_id'])
-                ? $branchIds[$userData['branch_id']->value]
+            $branchId = isset($userData['branch_name'])
+                ? $branchIds[$userData['branch_name']]
                 : null;
 
-            // Create or update the shared User record.
             $user = User::updateOrCreate(
                 ['email' => $userData['email']],
                 [
@@ -251,71 +244,57 @@ class DatabaseSeeder extends Seeder
                 ]
             );
 
-            /*
-             * Admin, Branch Manager, Staff and Receptionist
-             * each receive an employee number and active status.
-             */
             if (array_key_exists($roleKey, $counters)) {
                 $counters[$roleKey]++;
                 $number = $counters[$roleKey];
             }
 
-            // Create or update the matching profile.
             match ($role) {
                 UserRoles::ADMIN => Admin::updateOrCreate(
                     ['user_id' => $user->id],
                     [
-                        'employee_number' => 'ADM'
-                            . str_pad($number, 3, '0', STR_PAD_LEFT),
+                        'employee_number' => 'ADM' . str_pad($number, 3, '0', STR_PAD_LEFT),
                         'appointed_at' => now()->subMonths(6 * $number),
                         'employment_status' => 'active',
                     ]
                 ),
-
                 UserRoles::BRANCH_MANAGER => BranchManager::updateOrCreate(
                     ['user_id' => $user->id],
                     [
-                        'employee_number' => 'BM'
-                            . str_pad($number, 3, '0', STR_PAD_LEFT),
+                        'employee_number' => 'BM' . str_pad($number, 3, '0', STR_PAD_LEFT),
                         'appointed_at' => now()->subMonths(6 * $number),
                         'employment_status' => 'active',
                     ]
                 ),
-
                 UserRoles::STAFF => Staff::updateOrCreate(
                     ['user_id' => $user->id],
                     [
-                        'employee_number' => 'STF'
-                            . str_pad($number, 3, '0', STR_PAD_LEFT),
+                        'employee_number' => 'STF' . str_pad($number, 3, '0', STR_PAD_LEFT),
                         'hired_at' => now()->subMonths(6 * $number),
                         'employment_status' => 'active',
                     ]
                 ),
-
                 UserRoles::RECEPTIONIST => Receptionist::updateOrCreate(
                     ['user_id' => $user->id],
                     [
-                        'employee_number' => 'REC'
-                            . str_pad($number, 3, '0', STR_PAD_LEFT),
+                        'employee_number' => 'REC' . str_pad($number, 3, '0', STR_PAD_LEFT),
                         'hired_at' => now()->subMonths(6 * $number),
                         'employment_status' => 'active',
                     ]
                 ),
-
-                // Keep Owner-specific properties NULL.
                 UserRoles::PROPERTY_OWNER => Owner::updateOrCreate(
                     ['user_id' => $user->id],
                     [
                         'national_id' => null,
                         'bank_account' => null,
                         'address' => null,
+                        'verified_phone' => false,
                     ]
                 ),
-
-                // Keep Client-specific properties NULL.
                 UserRoles::CLIENT => Client::updateOrCreate(
                     ['user_id' => $user->id],
                     [
+                        'full_name' => $userData['name'],
                         'gender' => null,
                         'date_of_birth' => null,
                         'phone' => null,
@@ -330,39 +309,33 @@ class DatabaseSeeder extends Seeder
 
         /*
         |--------------------------------------------------------------------------
-        | 4. Assign each Branch Manager to their branch
+        | 4. Assign each Branch Manager to their branch (by NAME)
         |--------------------------------------------------------------------------
         */
 
         $managerAssignments = [
-            BranchLocations::MALE->value =>
-                'bm1@housing4raajje.mv',
-
-            BranchLocations::VILLINGILI->value =>
-                'bm2@housing4raajje.mv',
-
-            BranchLocations::HULHUMALE->value =>
-                'bm3@housing4raajje.mv',
+            'Malé Branch' => 'bm1@housing4raajje.mv',
+            'Villingili Branch' => 'bm2@housing4raajje.mv',
+            'Hulhumalé Branch' => 'bm3@housing4raajje.mv',
         ];
 
-        foreach ($managerAssignments as $location => $email) {
+        foreach ($managerAssignments as $branchName => $email) {
             $manager = User::where('email', $email)->firstOrFail();
+            $branch = Branch::where('name', $branchName)->firstOrFail();
 
-            $branch = Branch::where(
-                'location',
-                $location
-            )->firstOrFail();
-
-            // Keep the manager's own branch assignment consistent.
             if ((int) $manager->branch_id !== (int) $branch->id) {
-                throw new \RuntimeException(
-                    "Branch assignment mismatch for {$email}."
-                );
+                throw new \RuntimeException("Branch assignment mismatch for {$email}.");
             }
 
-            $branch->update([
-                'manager_id' => $manager->id,
-            ]);
+            $branch->update(['manager_id' => $manager->id]);
         }
+        
+        /*
+        |--------------------------------------------------------------------------
+        | 5. Seed properties + registrations
+        |--------------------------------------------------------------------------
+        */
+
+        $this->call(PropertySeeder::class);
     }
 }

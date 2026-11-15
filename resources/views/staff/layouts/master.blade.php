@@ -741,32 +741,15 @@
             </div>
 
             <div class="nav-group">
-                <span class="nav-heading">Communication</span>
+                <span class="nav-heading">Support</span>
 
-                <a href="{{ url('/staff/messages-support') }}"
-                   class="nav-link @if(request()->is('staff/messages-support*')) active @endif">
+                <a href="{{ url('/staff/support') }}"
+                   class="nav-link @if(request()->is('staff/support*')) active @endif">
                     <span class="material-symbols-outlined">support</span>
-                    Messages & Support
-                </a>
-
-                <a href="{{ url('/staff/notifications') }}"
-                   class="nav-link @if(request()->is('staff/notifications*')) active @endif">
-                    <span class="material-symbols-outlined">notifications</span>
-                    Notifications
+                    Support & Escalations
                 </a>
             </div>
         </nav>
-
-        <div class="sidebar-bottom">
-            <form method="POST" action="{{ url('/logout') }}">
-                @csrf
-                <button type="submit" class="nav-link logout"
-                        style="width: 100%; border: 0; background: transparent; text-align: left;">
-                    <span class="material-symbols-outlined">logout</span>
-                    Logout
-                </button>
-            </form>
-        </div>
     </aside>
 
     <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
@@ -811,7 +794,7 @@
                     </summary>
 
                     <div class="profile-dropdown" role="menu">
-                        <a href="{{ url('/staff/profile') }}" class="dropdown-item" role="menuitem">
+                        <a href="{{ route('profile.edit') }}" class="dropdown-item" role="menuitem">
                             <span class="material-symbols-outlined">person</span>
                             My profile
                         </a>

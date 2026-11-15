@@ -260,7 +260,7 @@
                                 <span class="small fw-bold">{{ Auth::user()->name ?? 'Aishath' }}</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow">
-                                <li><a class="dropdown-item" href="{{ url('/client/profile') }}">My profile</a></li>
+                                <li><a class="dropdown-item" href="{{ route('profile.edit') }}">My profile</a></li>
                                 <li><a class="dropdown-item" href="{{ url('/client/settings') }}">Preferences &amp; security</a></li>
                                 <li><hr class="dropdown-divider"></li>
                                 <li>
@@ -304,7 +304,7 @@
                             </li>
 
                             <li class="nav-item d-sm-none">
-                                <a class="nav-link" href="{{ url('/client/profile') }}">My profile</a>
+                                <a class="nav-link" href="{{ route('profile.edit') }}">My profile</a>
                             </li>
 
                             <li class="nav-item d-sm-none">

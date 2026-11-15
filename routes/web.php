@@ -3,6 +3,14 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\MfaController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Admin\BranchController;
+use App\Http\Controllers\Admin\AuditLogController;
+use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PropertyController;
+use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
+use App\Http\Controllers\Owner\PropertyController as OwnerPropertyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -52,7 +60,7 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
 
     if (! $user) {
         return redirect()->route('login')
-            ->withErrors('status', 'This verification link has expired. The account no longer exists. Please register again.');
+            ->withErrors(['email' => 'This verification link has expired. The account no longer exists. Please register again.']);
     }
 
     if (! hash_equals((string) $request->route('hash'), sha1($user->getEmailForVerification()))) {
@@ -76,22 +84,86 @@ Route::get('/email/verify/{id}/{hash}', function (Request $request) {
 
 //Authenticated/Protected Routes (only logged in AND verified users)
 Route::middleware(['auth', 'verified'])->group(function () {
-    // Client
+    //Universal Profile Routes
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profile/password', [ProfileController::class, 'updatePassword'])->name('profile.password.update');
+    Route::put('/profile/mfa', [ProfileController::class, 'toggleMfa'])->name('profile.mfa.toggle');
+    Route::put('/profile/email', [ProfileController::class, 'updateEmail'])->name('profile.email.update');
+    Route::get('/profile/email/verify/{token}', [ProfileController::class, 'verifyEmailChange'])->name('profile.email.verify');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    //Client
     Route::view('/client/home', 'client.home')->name('client.dashboard'); 
     Route::view('/client/properties', 'client.properties.index')->name('client.properties');
 
-    // Owner
-    Route::view('/owner/dashboard', 'owner.dashboard')->name('owner.dashboard');
-
-    // Admin
-    Route::view('/admin/dashboard', 'admin.dashboard')->name('admin.dashboard');
-
-    // Staff
+    //Owner
+    Route::prefix('owner')->name('owner.')->group(function () {
+        Route::get('/dashboard', [OwnerDashboardController::class, 'index'])->name('dashboard');
+        
+        // Property Management
+        Route::get('/properties', [OwnerPropertyController::class, 'index'])->name('properties.index');
+        Route::get('/properties/create', [OwnerPropertyController::class, 'create'])->name('properties.create');
+        Route::post('/properties', [OwnerPropertyController::class, 'store'])->name('properties.store');
+        Route::get('/properties/{property}', [OwnerPropertyController::class, 'show'])->name('properties.show');
+        Route::get('/properties/{property}/edit', [OwnerPropertyController::class, 'edit'])->name('properties.edit');
+        Route::put('/properties/{property}', [OwnerPropertyController::class, 'update'])->name('properties.update');
+        Route::delete('/properties/{property}', [OwnerPropertyController::class, 'destroy'])->name('properties.destroy');
+    });
+    //Staff
     Route::view('/staff/dashboard', 'staff.dashboard')->name('staff.dashboard');
 
-    // Receptionist
+    //Receptionist
     Route::view('/receptionist/dashboard', 'receptionist.dashboard')->name('receptionist.dashboard');
 
-    // Branch Manager
-    Route::view('/branch-manager/dashboard', 'branch-manager.dashboard')->name('branch-manager.dashboard');
+    //Branch Manager
+    Route::prefix('branch-manager')->name('branch-manager.')->group(function () {
+        Route::view('/dashboard', 'branch-manager.dashboard')->name('dashboard');
+
+        //Staff Management
+        Route::view('/staff', 'branch-manager.staff.index')->name('staff.index');
+
+        //Clients & Owners
+        Route::view('/clients-owners', 'branch-manager.clients-owners.index')->name('clients-owners.index');
+    });
+
+    // Admin Dashboard
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); 
+    // Admin User Management Routes
+    Route::prefix('admin')->name('admin.')->group(function () {
+        //User Management Routes
+        Route::get('/users', [AdminUserController::class, 'index'])->name('users.index');
+        Route::get('/users/create', [AdminUserController::class, 'create'])->name('users.create');
+        Route::post('/users', [AdminUserController::class, 'store'])->name('users.store');
+        Route::get('/users/{user}/edit', [AdminUserController::class, 'edit'])->name('users.edit');
+        Route::put('/users/{user}', [AdminUserController::class, 'update'])->name('users.update');
+        Route::post('/users/{user}/suspend', [AdminUserController::class, 'suspend'])->name('users.suspend');
+        Route::post('/users/{user}/reactivate', [AdminUserController::class, 'reactivate'])->name('users.reactivate');
+        Route::delete('/users/{user}', [AdminUserController::class, 'destroy'])->name('users.destroy');
+        
+        //Requests (Must go ABOVE the wildcard /users/{user} routes)
+        Route::get('/requests', [AdminUserController::class, 'requests'])->name('users.requests');
+
+        //Request Approvals
+        Route::post('/users/{user}/approve', [AdminUserController::class, 'approveRequest'])->name('users.approve');
+        Route::post('/users/{user}/reject', [AdminUserController::class, 'rejectRequest'])->name('users.reject');
+
+        //branch management
+        Route::get('/branches', [BranchController::class, 'index'])->name('branches.index');
+        Route::get('/branches/create', [BranchController::class, 'create'])->name('branches.create');
+        Route::post('/branches', [BranchController::class, 'store'])->name('branches.store');
+        Route::get('/branches/{branch}/edit', [BranchController::class, 'edit'])->name('branches.edit');
+        Route::put('/branches/{branch}', [BranchController::class, 'update'])->name('branches.update');
+        Route::delete('/branches/{branch}', [BranchController::class, 'destroy'])->name('branches.destroy');
+
+        // Property Management
+        Route::get('/properties',                     [PropertyController::class, 'index'])->name('properties.index');
+        Route::get('/properties/{property}',          [PropertyController::class, 'show'])->name('properties.show');
+        Route::post('/properties/{property}/approve', [PropertyController::class, 'approve'])->name('properties.approve');
+        Route::post('/properties/{property}/reject',  [PropertyController::class, 'reject'])->name('properties.reject');
+        Route::delete('/properties/{property}',       [PropertyController::class, 'destroy'])->name('properties.destroy');
+
+        //Audit Logs
+        Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');
+    });
 });

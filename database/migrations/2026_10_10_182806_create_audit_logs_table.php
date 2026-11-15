@@ -20,7 +20,7 @@ return new class extends Migration
 
             // Examples: User, Property, Application, Lease.
             $table->string('entity_type');
-            $table->unsignedBigInteger('entity_id');
+            $table->unsignedBigInteger('entity_id')->nullable();
 
             $table->text('description')->nullable();
             $table->json('details')->nullable();
