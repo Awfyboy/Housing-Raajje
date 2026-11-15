@@ -740,10 +740,6 @@
                     <span class="material-symbols-outlined">gavel</span>
                     Disputes & Escalations
                 </a>
-            </div>
-
-            <div class="nav-group">
-                <span class="nav-heading">Reporting</span>
 
                 <a href="{{ url('/branch-manager/reports') }}"
                    class="nav-link @if(request()->is('branch-manager/reports*')) active @endif">
@@ -752,21 +748,7 @@
                 </a>
             </div>
 
-            <div class="nav-group">
-                <span class="nav-heading">Communication</span>
 
-                <a href="{{ url('/branch-manager/messages') }}"
-                   class="nav-link @if(request()->is('branch-manager/messages*')) active @endif">
-                    <span class="material-symbols-outlined">message</span>
-                    Messages
-                </a>
-
-                <a href="{{ url('/branch-manager/notifications') }}"
-                   class="nav-link @if(request()->is('branch-manager/notifications*')) active @endif">
-                    <span class="material-symbols-outlined">notifications</span>
-                    Notifications
-                </a>
-            </div>
         </nav>
     </aside>
 
