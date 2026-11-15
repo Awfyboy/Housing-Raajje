@@ -15,7 +15,9 @@ class DashboardController extends Controller
         $owner = Auth::user()->ownerProfile;
 
         if (!$owner) {
-            abort(403, 'negative on Owner profile.');
+            // User has property_owner role but no profile yet — redirect to setup
+            return redirect()->route('profile.edit')
+                ->with('status', 'Please complete your Owner profile first.');
         }
 
         // 2. Counts for this specific owner

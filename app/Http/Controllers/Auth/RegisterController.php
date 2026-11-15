@@ -51,6 +51,23 @@ class RegisterController extends Controller
             'mfa_enabled' => !$isExternalUser //true for staff, false for external
         ]);
 
+        //Create corresponding profile record for external users
+        if ($role === UserRoles::PROPERTY_OWNER) {
+            $user->ownerProfile()->create([
+                'national_id' => null,
+                'bank_account' => null,
+                'address' => null,
+                'verified_phone' => false,
+            ]);
+        } elseif ($role === UserRoles::CLIENT) {
+            $user->clientProfile()->create([
+                'full_name' => $user->name,
+                'gender' => null,
+                'date_of_birth' => null,
+                'phone' => null,
+            ]);
+        }
+
         event(new Registered($user));
         
         Auth::login($user);
