@@ -6,8 +6,9 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\BranchController;
-use App\Http\Controllers\Admin\AuditLogController;   
+use App\Http\Controllers\Admin\AuditLogController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\PropertyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -115,7 +116,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     });
 
     // Admin Dashboard
-    Route::get('/admin/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('admin.dashboard'); 
+    Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin.dashboard'); 
     // Admin User Management Routes
     Route::prefix('admin')->name('admin.')->group(function () {
         //User Management Routes
@@ -142,6 +143,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/branches/{branch}/edit', [BranchController::class, 'edit'])->name('branches.edit');
         Route::put('/branches/{branch}', [BranchController::class, 'update'])->name('branches.update');
         Route::delete('/branches/{branch}', [BranchController::class, 'destroy'])->name('branches.destroy');
+
+        // Property Management
+        Route::get('/properties',                     [PropertyController::class, 'index'])->name('properties.index');
+        Route::get('/properties/{property}',          [PropertyController::class, 'show'])->name('properties.show');
+        Route::post('/properties/{property}/approve', [PropertyController::class, 'approve'])->name('properties.approve');
+        Route::post('/properties/{property}/reject',  [PropertyController::class, 'reject'])->name('properties.reject');
+        Route::delete('/properties/{property}',       [PropertyController::class, 'destroy'])->name('properties.destroy');
 
         //Audit Logs
         Route::get('/audit-logs', [AuditLogController::class, 'index'])->name('audit-logs.index');

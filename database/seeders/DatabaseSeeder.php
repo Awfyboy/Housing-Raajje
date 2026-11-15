@@ -329,5 +329,13 @@ class DatabaseSeeder extends Seeder
 
             $branch->update(['manager_id' => $manager->id]);
         }
+        
+        /*
+        |--------------------------------------------------------------------------
+        | 5. Seed properties + registrations
+        |--------------------------------------------------------------------------
+        */
+
+        $this->call(PropertySeeder::class);
     }
 }
