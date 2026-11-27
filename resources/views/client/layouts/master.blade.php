@@ -279,13 +279,13 @@
                     <div class="collapse navbar-collapse order-lg-2 me-lg-4" id="clientNavbar">
                         <ul class="navbar-nav ms-auto align-items-lg-center gap-lg-4">
                             <li class="nav-item">
-                                <a class="nav-link @if(View::yieldContent('activeNav') === 'home') active @endif" href="{{ url('/') }}">
+                                <a class="nav-link @if(View::yieldContent('activeNav') === 'home') active @endif" href="{{ url('client.home') }}">
                                     Home
                                 </a>
                             </li>
 
                             <li class="nav-item">
-                                <a class="nav-link @if(View::yieldContent('activeNav') === 'properties') active @endif" href="{{ route('client.properties') }}">
+                                <a class="nav-link @if(View::yieldContent('activeNav') === 'properties') active @endif" href="{{ route('client.properties.index') }}">
                                     Properties
                                 </a>
                             </li>

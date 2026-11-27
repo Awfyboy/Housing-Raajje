@@ -231,92 +231,42 @@
             </div>
 
             <div class="row g-4">
-                <!-- Property 1 -->
-                <div class="col-md-6 col-xl-4">
-                    <article class="card property-card">
-                        <div class="property-image-wrap">
-                            <img class="property-image" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" alt="Ocean View Residence interior">
-                            <span class="availability-badge">Available now</span>
-                            <button class="save-button" type="button" aria-label="Save Ocean View Residence" aria-pressed="false" data-save-button>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="card-body p-4">
-                            <p class="property-label mb-1">2 bedrooms</p>
-                            <h3 class="h5 fw-bold mb-2">Ocean View Residence</h3>
-                            <p class="property-location mb-0">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle>
-                                </svg>
-                                Hulhumalé, Phase 2
-                            </p>
-                            <div class="d-flex align-items-center justify-content-between gap-3 border-top mt-4 pt-3">
-                                <p class="property-price mb-0">MVR 18,000 <small>/ month</small></p>
-                                <a class="btn btn-hr rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" href="{{ url('/client/properties/ocean-view-residence') }}" aria-label="View Ocean View Residence">→</a>
+                @forelse($recommendedProperties as $property)
+                    <div class="col-md-6 col-xl-4">
+                        <article class="card property-card">
+                            <div class="property-image-wrap">
+                                {{-- Using a static image for now since you don't have an image column yet --}}
+                                <img class="property-image" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" alt="{{ $property->title }} interior">
+                                
+                                <span class="availability-badge">Available now</span>
+                                
+                                <button class="save-button" type="button" aria-label="Save {{ $property->title }}" aria-pressed="false" data-save-button>
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
+                                    </svg>
+                                </button>
                             </div>
-                        </div>
-                    </article>
-                </div>
-
-                <!-- Property 2 -->
-                <div class="col-md-6 col-xl-4">
-                    <article class="card property-card">
-                        <div class="property-image-wrap">
-                            <img class="property-image" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" alt="Reefside Studio interior">
-                            <span class="availability-badge">Available soon</span>
-                            <button class="save-button is-saved" type="button" aria-label="Remove Reefside Studio from saved properties" aria-pressed="true" data-save-button>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="card-body p-4">
-                            <p class="property-label mb-1">1 bedroom</p>
-                            <h3 class="h5 fw-bold mb-2">Reefside Studio</h3>
-                            <p class="property-location mb-0">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle>
-                                </svg>
-                                Henveiru, Malé
-                            </p>
-                            <div class="d-flex align-items-center justify-content-between gap-3 border-top mt-4 pt-3">
-                                <p class="property-price mb-0">MVR 12,000 <small>/ month</small></p>
-                                <a class="btn btn-hr rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" href="{{ url('/client/properties/reefside-studio') }}" aria-label="View Reefside Studio">→</a>
+                            <div class="card-body p-4">
+                                <p class="property-label mb-1">{{ $property->bedrooms }} bedrooms · {{ ucfirst($property->property_type) }}</p>
+                                <h3 class="h5 fw-bold mb-2">{{ $property->title }}</h3>
+                                <p class="property-location mb-0">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                        <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle>
+                                    </svg>
+                                    {{ $property->location }}
+                                </p>
+                                <div class="d-flex align-items-center justify-content-between gap-3 border-top mt-4 pt-3">
+                                    <p class="property-price mb-0">MVR {{ number_format($property->monthly_rent, 0) }} <small>/ month</small></p>
+                                    <a class="btn btn-hr rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" href="{{ route('client.properties.show', $property) }}" aria-label="View {{ $property->title }}">→</a>
+                                </div>
                             </div>
-                        </div>
-                    </article>
-                </div>
-
-                <!-- Property 3 -->
-                <div class="col-md-6 col-xl-4">
-                    <article class="card property-card">
-                        <div class="property-image-wrap">
-                            <img class="property-image" src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" alt="Palm Court Apartment interior">
-                            <span class="availability-badge">Available now</span>
-                            <button class="save-button" type="button" aria-label="Save Palm Court Apartment" aria-pressed="false" data-save-button>
-                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78z"></path>
-                                </svg>
-                            </button>
-                        </div>
-                        <div class="card-body p-4">
-                            <p class="property-label mb-1">3 bedrooms</p>
-                            <h3 class="h5 fw-bold mb-2">Palm Court Apartment</h3>
-                            <p class="property-location mb-0">
-                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                                    <path d="M20 10c0 5-8 11-8 11S4 15 4 10a8 8 0 1 1 16 0z"></path><circle cx="12" cy="10" r="2.5"></circle>
-                                </svg>
-                                Hulhumalé, Phase 1
-                            </p>
-                            <div class="d-flex align-items-center justify-content-between gap-3 border-top mt-4 pt-3">
-                                <p class="property-price mb-0">MVR 25,000 <small>/ month</small></p>
-                                <a class="btn btn-hr rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 40px; height: 40px;" href="{{ url('/client/properties/palm-court-apartment') }}" aria-label="View Palm Court Apartment">→</a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
+                        </article>
+                    </div>
+                @empty
+                    <div class="col-12">
+                        <p class="text-muted-custom">No properties available at the moment.</p>
+                    </div>
+                @endforelse
             </div>
 
             <a class="text-link d-inline-flex d-sm-none mt-3" href="{{ url('/client/properties') }}">

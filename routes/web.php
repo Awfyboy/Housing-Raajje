@@ -11,6 +11,8 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\PropertyController;
 use App\Http\Controllers\Owner\DashboardController as OwnerDashboardController;
 use App\Http\Controllers\Owner\PropertyController as OwnerPropertyController;
+use App\Http\Controllers\Client\DashboardController as ClientDashboardController;
+use App\Http\Controllers\Client\PropertyController as ClientPropertyController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -94,8 +96,13 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //Client
-    Route::view('/client/home', 'client.home')->name('client.dashboard'); 
-    Route::view('/client/properties', 'client.properties.index')->name('client.properties');
+    Route::prefix('client')->name('client.')->group(function () {
+        Route::get('/dashboard', [ClientDashboardController::class, 'index'])->name('dashboard');
+        
+        // Property market search
+        Route::get('/properties', [ClientPropertyController::class, 'index'])->name('properties.index');
+        Route::get('/properties/{property}', [ClientPropertyController::class, 'show'])->name('properties.show');
+    }); 
 
     //Owner
     Route::prefix('owner')->name('owner.')->group(function () {
@@ -110,6 +117,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/properties/{property}', [OwnerPropertyController::class, 'update'])->name('properties.update');
         Route::delete('/properties/{property}', [OwnerPropertyController::class, 'destroy'])->name('properties.destroy');
     });
+    
     //Staff
     Route::view('/staff/dashboard', 'staff.dashboard')->name('staff.dashboard');
 

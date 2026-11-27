@@ -350,208 +350,67 @@
 
     <div class="container-xxl px-3 px-lg-4 search-section">
         {{-- Recommended properties --}}
-        <section aria-labelledby="recommended-heading">
-            <div class="d-flex flex-column flex-sm-row
-                        align-items-sm-end justify-content-between gap-2 mb-4">
+        <section aria-labelledby="recommended-heading" class="mb-5">
+            <div class="d-flex flex-column flex-sm-row align-items-sm-end justify-content-between gap-2 mb-4">
                 <div>
-                    <h2 id="recommended-heading" class="section-heading mb-2">
-                        Recommended for you
-                    </h2>
-
-                    <p class="text-muted-custom small mb-0">
-                        Based on your preferences:
-                        <strong class="text-dark">
-                            Hulhumalé · Up to MVR 20,000 · 2+ bedrooms
-                        </strong>
-                    </p>
+                    <h2 id="recommended-heading" class="section-heading mb-2">Available Properties</h2>
+                    <p class="text-muted-custom small mb-0">Showing {{ $properties->total() }} properties</p>
                 </div>
-
-                <span class="results-count">3 best matches</span>
             </div>
 
             <div class="row g-4">
-                {{-- Recommended property 1 --}}
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="property-card h-100">
-                        <div class="position-relative overflow-hidden">
-                            <img
-                                src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
-                                alt="Ocean View Residence interior"
-                                class="property-image"
-                                loading="lazy"
-                            >
+                @forelse($properties as $property)
+                    <div class="col-12 col-md-6 col-xl-4">
+                        <article class="property-card h-100">
+                            <div class="position-relative overflow-hidden">
+                                <img
+                                    src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
+                                    alt="{{ $property->title }}"
+                                    class="property-image"
+                                    loading="lazy"
+                                >
+                                <span class="badge bg-light text-success position-absolute top-0 start-0 m-3">
+                                    <span class="availability-dot"></span> Available now
+                                </span>
+                            </div>
 
-                            <span class="badge bg-light text-success position-absolute top-0 start-0 m-3">
-                                <span class="availability-dot"></span>
-                                Available now
-                            </span>
-
-                            <button
-                                type="button"
-                                class="save-button position-absolute top-0 end-0 m-3"
-                                aria-label="Save Ocean View Residence"
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor"
-                                     stroke-width="1.8" aria-hidden="true">
-                                    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l8.9 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z"></path>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="p-4">
-                            <p class="property-type mb-1">
-                                2 bedrooms · Apartment
-                            </p>
-
-                            <h3 class="h5 fw-bold mb-2">
-                                Ocean View Residence
-                            </h3>
-
-                            <p class="property-location mb-0">
-                                <span aria-hidden="true">📍</span>
-                                Hulhumalé · Phase 2
-                            </p>
-
-                            <hr class="property-divider my-4">
-
-                            <div class="d-flex align-items-center
-                                        justify-content-between gap-2">
-                                <p class="property-price mb-0">
-                                    MVR 18,000
-                                    <small>/ month</small>
+                            <div class="p-4">
+                                <p class="property-type mb-1">
+                                    {{ $property->bedrooms }} bedrooms · {{ ucfirst($property->property_type) }}
                                 </p>
 
-                                <a href="{{ url('/client/properties') }}"
-                                   class="btn btn-hr btn-sm rounded-pill px-3">
-                                    View
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
+                                <h3 class="h5 fw-bold mb-2">{{ $property->title }}</h3>
 
-                {{-- Recommended property 2 --}}
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="property-card h-100">
-                        <div class="position-relative overflow-hidden">
-                            <img
-                                src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
-                                alt="Palm Court Apartment interior"
-                                class="property-image"
-                                loading="lazy"
-                            >
-
-                            <span class="badge bg-light text-success position-absolute top-0 start-0 m-3">
-                                <span class="availability-dot"></span>
-                                Available now
-                            </span>
-
-                            <button
-                                type="button"
-                                class="save-button position-absolute top-0 end-0 m-3"
-                                aria-label="Save Palm Court Apartment"
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor"
-                                     stroke-width="1.8" aria-hidden="true">
-                                    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l8.9 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z"></path>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="p-4">
-                            <p class="property-type mb-1">
-                                3 bedrooms · Apartment
-                            </p>
-
-                            <h3 class="h5 fw-bold mb-2">
-                                Palm Court Apartment
-                            </h3>
-
-                            <p class="property-location mb-0">
-                                <span aria-hidden="true">📍</span>
-                                Hulhumalé · Phase 1
-                            </p>
-
-                            <hr class="property-divider my-4">
-
-                            <div class="d-flex align-items-center
-                                        justify-content-between gap-2">
-                                <p class="property-price mb-0">
-                                    MVR 19,500
-                                    <small>/ month</small>
+                                <p class="property-location mb-0">
+                                    <span aria-hidden="true">📍</span> {{ $property->location }}
                                 </p>
 
-                                <a href="{{ url('/client/properties') }}"
-                                   class="btn btn-hr btn-sm rounded-pill px-3">
-                                    View
-                                </a>
+                                <hr class="property-divider my-4">
+
+                                <div class="d-flex align-items-center justify-content-between gap-2">
+                                    <p class="property-price mb-0">
+                                        MVR {{ number_format($property->monthly_rent, 0) }}
+                                        <small>/ month</small>
+                                    </p>
+
+                                    <a href="{{ route('client.properties.show', $property) }}" class="btn btn-hr btn-sm rounded-pill px-3">
+                                        View
+                                    </a>
+                                </div>
                             </div>
-                        </div>
-                    </article>
-                </div>
+                        </article>
+                    </div>
+                @empty
+                    <div class="col-12 text-center py-5">
+                        <h3 class="h5 fw-bold">No properties found</h3>
+                        <p class="text-muted-custom">Try adjusting your search filters.</p>
+                    </div>
+                @endforelse
+            </div>
 
-                {{-- Recommended property 3 --}}
-                <div class="col-12 col-md-6 col-xl-4">
-                    <article class="property-card h-100">
-                        <div class="position-relative overflow-hidden">
-                            <img
-                                src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
-                                alt="Ocean Breeze Apartment interior"
-                                class="property-image"
-                                loading="lazy"
-                            >
-
-                            <span class="badge bg-light text-success position-absolute top-0 start-0 m-3">
-                                <span class="availability-dot"></span>
-                                Available now
-                            </span>
-
-                            <button
-                                type="button"
-                                class="save-button position-absolute top-0 end-0 m-3"
-                                aria-label="Save Ocean Breeze Apartment"
-                            >
-                                <svg width="18" height="18" viewBox="0 0 24 24"
-                                     fill="none" stroke="currentColor"
-                                     stroke-width="1.8" aria-hidden="true">
-                                    <path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8l8.9 8.8 8.8-8.8a5.5 5.5 0 0 0 0-7.8z"></path>
-                                </svg>
-                            </button>
-                        </div>
-
-                        <div class="p-4">
-                            <p class="property-type mb-1">
-                                2 bedrooms · Apartment
-                            </p>
-
-                            <h3 class="h5 fw-bold mb-2">
-                                Ocean Breeze Apartment
-                            </h3>
-
-                            <p class="property-location mb-0">
-                                <span aria-hidden="true">📍</span>
-                                Hulhumalé · Phase 2
-                            </p>
-
-                            <hr class="property-divider my-4">
-
-                            <div class="d-flex align-items-center
-                                        justify-content-between gap-2">
-                                <p class="property-price mb-0">
-                                    MVR 17,000
-                                    <small>/ month</small>
-                                </p>
-
-                                <a href="{{ url('/client/properties') }}"
-                                   class="btn btn-hr btn-sm rounded-pill px-3">
-                                    View
-                                </a>
-                            </div>
-                        </div>
-                    </article>
-                </div>
+            {{-- Pagination --}}
+            <div class="mt-5 d-flex justify-content-center">
+                {{ $properties->links() }}
             </div>
         </section>
 
