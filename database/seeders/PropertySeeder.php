@@ -2,7 +2,6 @@
 
 namespace Database\Seeders;
 
-use App\Models\Entity\Branch;
 use App\Models\Entity\Owner;
 use App\Models\Entity\Property;
 use App\Models\Entity\PropertyRegistration;
@@ -13,10 +12,7 @@ class PropertySeeder extends Seeder
 {
     public function run(): void
     {
-        $branches = Branch::pluck('id', 'name');
         $admin = User::where('email', 'admin1@housing4raajje.mv')->first();
-
-        // Fetch all owners 
         $owners = Owner::all();
 
         if ($owners->isEmpty() || !$admin) {
@@ -33,22 +29,14 @@ class PropertySeeder extends Seeder
         shuffle($statuses);
 
         for ($i = 0; $i < 120; $i++) {
-            // Pick a random owner (could be a test one or a generated one)
             $owner = $owners->random();
             
-            // Factory handles the Maldivian address + details
+            // Factory handles the Maldivian address, branch_id, and all property details
             $property = Property::factory()->make([
                 'owner_id' => $owner->id,
                 'status' => $statuses[$i],
             ]);
 
-            // Auto-match the branch
-            $branchName = match ($property->location) {
-                'Malé' => 'Malé Branch',
-                'Hulhumalé' => 'Hulhumalé Branch',
-                'Villingili' => 'Villingili Branch',
-            };
-            $property->branch_id = $branches[$branchName] ?? $branches->first();
             $property->save();
 
             // Registration
