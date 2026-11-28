@@ -3,8 +3,10 @@
 namespace App\Models\Entity;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Database\Factories\PropertyFactory;
 
 class Property extends Model
 {
@@ -12,7 +14,8 @@ class Property extends Model
     public const STATUS_AVAILABLE = 'available';
     public const STATUS_RENTED = 'rented';
     public const STATUS_UNAVAILABLE = 'unavailable';
-
+    
+    use HasFactory;
     protected $fillable = [
         'owner_id',
         'branch_id',
@@ -34,6 +37,11 @@ class Property extends Model
             'bedrooms' => 'integer',
             'bathrooms' => 'integer',
         ];
+    }
+
+    protected static function newFactory()
+    {
+    return PropertyFactory::new();
     }
 
     public function owner(): BelongsTo

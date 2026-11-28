@@ -31,7 +31,6 @@ class DatabaseSeeder extends Seeder
 
         // Map each branch NAME to its actual database branch ID.
         $branchIds = [];
-
         foreach (Branch::all() as $branch) {
             $branchIds[$branch->name] = $branch->id;
         }
@@ -41,180 +40,43 @@ class DatabaseSeeder extends Seeder
         | 2. Define the users
         |--------------------------------------------------------------------------
         */
-
         $users = [
             // Administrators: no branch assignment.
-            [
-                'name' => 'Admin One', //Keep this as first in the array as ID 1 would be super admin
-                'email' => 'admin1@housing4raajje.mv',
-                'phone' => '7000001',
-                'role' => UserRoles::ADMIN,
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Admin Two',
-                'email' => 'admin2@housing4raajje.mv',
-                'phone' => '7000002',
-                'role' => UserRoles::ADMIN,
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Admin Three',
-                'email' => 'admin3@housing4raajje.mv',
-                'phone' => '7000003',
-                'role' => UserRoles::ADMIN,
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
+            ['name' => 'Admin One', 'email' => 'admin1@housing4raajje.mv', 'phone' => '7000001', 'role' => UserRoles::ADMIN, 'mfa_enabled' => 1, 'email_verified_at' => now()],
+            ['name' => 'Admin Two', 'email' => 'admin2@housing4raajje.mv', 'phone' => '7000002', 'role' => UserRoles::ADMIN, 'mfa_enabled' => 1, 'email_verified_at' => now()],
+            ['name' => 'Admin Three', 'email' => 'admin3@housing4raajje.mv', 'phone' => '7000003', 'role' => UserRoles::ADMIN, 'mfa_enabled' => 1, 'email_verified_at' => now()],
 
-            // Branch Managers: one per branch (3 branches = 3 managers)
-            [
-                'name' => 'Branch Manager One',
-                'email' => 'bm1@housing4raajje.mv',
-                'phone' => '7000004',
-                'role' => UserRoles::BRANCH_MANAGER,
-                'branch_name' => 'Malé Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Branch Manager Two',
-                'email' => 'bm2@housing4raajje.mv',
-                'phone' => '7000005',
-                'role' => UserRoles::BRANCH_MANAGER,
-                'branch_name' => 'Villingili Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Branch Manager Three',
-                'email' => 'bm3@housing4raajje.mv',
-                'phone' => '7000006',
-                'role' => UserRoles::BRANCH_MANAGER,
-                'branch_name' => 'Hulhumalé Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
+            // Branch Managers
+            ['name' => 'Branch Manager One', 'email' => 'bm1@housing4raajje.mv', 'phone' => '7000004', 'role' => UserRoles::BRANCH_MANAGER, 'branch_name' => 'Malé Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
+            ['name' => 'Branch Manager Two', 'email' => 'bm2@housing4raajje.mv', 'phone' => '7000005', 'role' => UserRoles::BRANCH_MANAGER, 'branch_name' => 'Villingili Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
+            ['name' => 'Branch Manager Three', 'email' => 'bm3@housing4raajje.mv', 'phone' => '7000006', 'role' => UserRoles::BRANCH_MANAGER, 'branch_name' => 'Hulhumalé Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
 
-            // Staff: one per branch
-            [
-                'name' => 'Staff One',
-                'email' => 'staff1@housing4raajje.mv',
-                'phone' => '7000007',
-                'role' => UserRoles::STAFF,
-                'branch_name' => 'Malé Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Staff Two',
-                'email' => 'staff2@housing4raajje.mv',
-                'phone' => '7000008',
-                'role' => UserRoles::STAFF,
-                'branch_name' => 'Villingili Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Staff Three',
-                'email' => 'staff3@housing4raajje.mv',
-                'phone' => '7000009',
-                'role' => UserRoles::STAFF,
-                'branch_name' => 'Hulhumalé Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
+            // Staff
+            ['name' => 'Staff One', 'email' => 'staff1@housing4raajje.mv', 'phone' => '7000007', 'role' => UserRoles::STAFF, 'branch_name' => 'Malé Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
+            ['name' => 'Staff Two', 'email' => 'staff2@housing4raajje.mv', 'phone' => '7000008', 'role' => UserRoles::STAFF, 'branch_name' => 'Villingili Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
+            ['name' => 'Staff Three', 'email' => 'staff3@housing4raajje.mv', 'phone' => '7000009', 'role' => UserRoles::STAFF, 'branch_name' => 'Hulhumalé Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
 
-            // Receptionists: one per branch
-            [
-                'name' => 'Receptionist One',
-                'email' => 'receptionist1@housing4raajje.mv',
-                'phone' => '7000010',
-                'role' => UserRoles::RECEPTIONIST,
-                'branch_name' => 'Malé Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Receptionist Two',
-                'email' => 'receptionist2@housing4raajje.mv',
-                'phone' => '7000011',
-                'role' => UserRoles::RECEPTIONIST,
-                'branch_name' => 'Villingili Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Receptionist Three',
-                'email' => 'receptionist3@housing4raajje.mv',
-                'phone' => '7000012',
-                'role' => UserRoles::RECEPTIONIST,
-                'branch_name' => 'Hulhumalé Branch',
-                'mfa_enabled' => 1,
-                'email_verified_at' => now(),
-            ],
+            // Receptionists
+            ['name' => 'Receptionist One', 'email' => 'receptionist1@housing4raajje.mv', 'phone' => '7000010', 'role' => UserRoles::RECEPTIONIST, 'branch_name' => 'Malé Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
+            ['name' => 'Receptionist Two', 'email' => 'receptionist2@housing4raajje.mv', 'phone' => '7000011', 'role' => UserRoles::RECEPTIONIST, 'branch_name' => 'Villingili Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
+            ['name' => 'Receptionist Three', 'email' => 'receptionist3@housing4raajje.mv', 'phone' => '7000012', 'role' => UserRoles::RECEPTIONIST, 'branch_name' => 'Hulhumalé Branch', 'mfa_enabled' => 1, 'email_verified_at' => now()],
 
-            // Property Owners: no branch assignment.
-            [
-                'name' => 'Property Owner One',
-                'email' => 'owner1@housing4raajje.mv',
-                'phone' => '7000013',
-                'role' => UserRoles::PROPERTY_OWNER,
-                'mfa_enabled' => 0,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Property Owner Two',
-                'email' => 'owner2@housing4raajje.mv',
-                'phone' => '7000014',
-                'role' => UserRoles::PROPERTY_OWNER,
-                'mfa_enabled' => 0,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Property Owner Three',
-                'email' => 'owner3@housing4raajje.mv',
-                'phone' => '7000015',
-                'role' => UserRoles::PROPERTY_OWNER,
-                'mfa_enabled' => 0,
-                'email_verified_at' => now(),
-            ],
+            // Property Owners (Test)
+            ['name' => 'Property Owner One', 'email' => 'owner1@housing4raajje.mv', 'phone' => '7000013', 'role' => UserRoles::PROPERTY_OWNER, 'mfa_enabled' => 0, 'email_verified_at' => now()],
+            ['name' => 'Property Owner Two', 'email' => 'owner2@housing4raajje.mv', 'phone' => '7000014', 'role' => UserRoles::PROPERTY_OWNER, 'mfa_enabled' => 0, 'email_verified_at' => now()],
+            ['name' => 'Property Owner Three', 'email' => 'owner3@housing4raajje.mv', 'phone' => '7000015', 'role' => UserRoles::PROPERTY_OWNER, 'mfa_enabled' => 0, 'email_verified_at' => now()],
 
-            // Clients: no branch assignment.
-            [
-                'name' => 'Client One',
-                'email' => 'client1@housing4raajje.mv',
-                'phone' => '7000016',
-                'role' => UserRoles::CLIENT,
-                'mfa_enabled' => 0,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Client Two',
-                'email' => 'client2@housing4raajje.mv',
-                'phone' => '7000017',
-                'role' => UserRoles::CLIENT,
-                'mfa_enabled' => 0,
-                'email_verified_at' => now(),
-            ],
-            [
-                'name' => 'Client Three',
-                'email' => 'client3@housing4raajje.mv',
-                'phone' => '7000018',
-                'role' => UserRoles::CLIENT,
-                'mfa_enabled' => 0,
-                'email_verified_at' => now(),
-            ],
+            // Clients (Test)
+            ['name' => 'Client One', 'email' => 'client1@housing4raajje.mv', 'phone' => '7000016', 'role' => UserRoles::CLIENT, 'mfa_enabled' => 0, 'email_verified_at' => now()],
+            ['name' => 'Client Two', 'email' => 'client2@housing4raajje.mv', 'phone' => '7000017', 'role' => UserRoles::CLIENT, 'mfa_enabled' => 0, 'email_verified_at' => now()],
+            ['name' => 'Client Three', 'email' => 'client3@housing4raajje.mv', 'phone' => '7000018', 'role' => UserRoles::CLIENT, 'mfa_enabled' => 0, 'email_verified_at' => now()],
         ];
 
         /*
         |--------------------------------------------------------------------------
-        | 3. Create users and their corresponding profile models
+        | 3. Create test users and their corresponding profile models
         |--------------------------------------------------------------------------
         */
-
         $counters = [
             UserRoles::ADMIN->value => 0,
             UserRoles::BRANCH_MANAGER->value => 0,
@@ -329,13 +191,25 @@ class DatabaseSeeder extends Seeder
 
             $branch->update(['manager_id' => $manager->id]);
         }
-        
+
         /*
         |--------------------------------------------------------------------------
-        | 5. Seed properties + registrations
+        | 5. Generate Fake Owners & Clients
         |--------------------------------------------------------------------------
         */
+        // Create 20 extra owners (adds to the 3 test owners = 23 total)
+        Owner::factory()->count(20)->create();
+        
+        // Create 50 extra clients (adds to the 3 test clients = 53 total)
+        Client::factory()->count(50)->create();
 
+        /*
+        |--------------------------------------------------------------------------
+        | 6. Seed properties + registrations
+        |--------------------------------------------------------------------------
+        */
+        // This will now pull from ALL 23 owners (both test and fake)
+        // to generate the 120 properties.
         $this->call(PropertySeeder::class);
     }
 }

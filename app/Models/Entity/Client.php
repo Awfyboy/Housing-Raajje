@@ -3,12 +3,15 @@
 namespace App\Models\Entity;
 
 use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Database\Factories\ClientFactory;
 
 class Client extends Model
 {
+    use HasFactory;
     protected $fillable = [
         'user_id',
         'full_name', //updating
@@ -29,6 +32,11 @@ class Client extends Model
             'preferred_rooms' => 'integer',
         ];
     }
+    
+    protected static function newFactory()
+    {
+        return ClientFactory::new();
+    }    
 
     public function user(): BelongsTo
     {
