@@ -102,6 +102,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
         // Property market search
         Route::get('/properties', [ClientPropertyController::class, 'index'])->name('properties.index');
         Route::get('/properties/{property}', [ClientPropertyController::class, 'show'])->name('properties.show');
+
+        // Dummy pages
+        Route::view('/schedule', 'client.schedule.index')->name('schedule');
+        Route::view('/messages', 'client.messages.index')->name('messages');
+        Route::view('/applications', 'client.applications.index')->name('applications');
+        Route::view('/leases', 'client.leases.index')->name('leases');
     }); 
 
     //Owner
@@ -117,7 +123,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::put('/properties/{property}', [OwnerPropertyController::class, 'update'])->name('properties.update');
         Route::delete('/properties/{property}', [OwnerPropertyController::class, 'destroy'])->name('properties.destroy');
     });
-    
+
     //Staff
     Route::view('/staff/dashboard', 'staff.dashboard')->name('staff.dashboard');
 
