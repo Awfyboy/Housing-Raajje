@@ -81,12 +81,6 @@
         font-weight: 500;
     }
 
-    .availability {
-        color: var(--hr-success);
-        font-size: 0.75rem;
-        font-weight: 800;
-    }
-
     .availability-dot {
         display: inline-block;
         width: 7px;
@@ -123,31 +117,16 @@
 <main>
     {{-- Search and filters --}}
     <section class="container-xxl px-3 px-lg-4 pt-4 pt-lg-5">
-        <form
-            action="{{ route('client.properties.index') }}"
-            method="GET"
-            class="search-panel p-3 p-md-4"
-        >
+        <form action="{{ route('client.properties.index') }}" method="GET" class="search-panel p-3 p-md-4">
             {{-- Keyword search --}}
             <div class="input-group input-group-lg mb-4">
                 <span class="input-group-text bg-transparent border-end-0">
-                    <svg width="20" height="20" viewBox="0 0 24 24"
-                         fill="none" stroke="currentColor" stroke-width="1.8"
-                         stroke-linecap="round" stroke-linejoin="round"
-                         aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                         <circle cx="11" cy="11" r="7"></circle>
                         <path d="m20 20-4-4"></path>
                     </svg>
                 </span>
-
-                <input
-                    type="search"
-                    name="q"
-                    class="form-control border-start-0"
-                    placeholder="Search by property name, location or area"
-                    aria-label="Search properties"
-                    value="{{ request('q') }}"
-                >
+                <input type="search" name="q" class="form-control border-start-0" placeholder="Search by property name, location or area" value="{{ request('q') }}">
             </div>
 
             {{-- Main filters --}}
@@ -177,28 +156,12 @@
                     <label for="max_rent" class="filter-label">Maximum monthly rent</label>
                     <div class="input-group">
                         <span class="input-group-text">MVR</span>
-                        <input
-                            type="number"
-                            id="max_rent"
-                            name="max_rent"
-                            class="form-control filter-control"
-                            min="0"
-                            step="500"
-                            placeholder="Any budget"
-                            value="{{ request('max_rent') }}"
-                        >
+                        <input type="number" id="max_rent" name="max_rent" class="form-control filter-control" min="0" step="500" placeholder="Any budget" value="{{ request('max_rent') }}">
                     </div>
                 </div>
 
                 <div class="col-6 col-xl-auto">
-                    <button
-                        class="btn btn-outline-secondary w-100 py-3"
-                        type="button"
-                        data-bs-toggle="collapse"
-                        data-bs-target="#advancedFilters"
-                        aria-expanded="false"
-                        aria-controls="advancedFilters"
-                    >
+                    <button class="btn btn-outline-secondary w-100 py-3" type="button" data-bs-toggle="collapse" data-bs-target="#advancedFilters" aria-expanded="false" aria-controls="advancedFilters">
                         More filters
                     </button>
                 </div>
@@ -243,12 +206,7 @@
                     <div class="col-12 col-md-6 col-xl-4">
                         <article class="property-card h-100">
                             <div class="position-relative overflow-hidden">
-                                <img
-                                    src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
-                                    alt="{{ $property->title }}"
-                                    class="property-image"
-                                    loading="lazy"
-                                >
+                                <img src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg" alt="{{ $property->title }}" class="property-image" loading="lazy">
                                 <span class="badge bg-light text-success position-absolute top-0 start-0 m-3">
                                     <span class="availability-dot"></span> Available now
                                 </span>
@@ -262,7 +220,7 @@
                                 <h3 class="h5 fw-bold mb-2">{{ $property->title }}</h3>
 
                                 <p class="property-location mb-0">
-                                    <span aria-hidden="true">📍</span> {{ $property->location }}
+                                    <span aria-hidden="true"></span> {{ $property->location }}
                                 </p>
 
                                 <hr class="property-divider my-4">
@@ -288,12 +246,35 @@
                 @endforelse
             </div>
 
-            {{-- Pagination --}}
-            @if($properties->hasPages())
-                <div class="mt-5 d-flex justify-content-center">
-                    {{ $properties->links() }}
+            {{-- ---------- Pagination footer ---------- --}}
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 16px; font-size: 12px;">
+                
+                {{-- Info text --}}
+                <div style="color: #a0aec0;">
+                    @if ($properties->total() > 0)
+                        <span style="color: #a0aec0;">Showing {{ $properties->firstItem() }}–{{ $properties->lastItem() }} of {{ $properties->total() }}</span>
+                    @else
+                        <span style="color: #a0aec0;">Showing 0 of 0</span>
+                    @endif
                 </div>
-            @endif
+
+                {{-- Nav buttons --}}
+                <div style="display: flex; gap: 0.25rem; align-items: center;">
+                    @if ($properties->onFirstPage())
+                        <span style="padding: 0.4rem 0.75rem; border-radius: 0.375rem; background: #f1f4f8; color: #ccc;">« Prev</span>
+                    @else
+                        <a href="{{ $properties->previousPageUrl() }}" style="padding: 0.4rem 0.75rem; border-radius: 0.375rem; background: #111827; color: #ffffff; text-decoration: none; display: inline-block;">« Prev</a>
+                    @endif
+
+                    <span style="padding: 0.4rem 0.75rem; border-radius: 0.375rem; background: #f1f4f8; color: #111827;">{{ $properties->currentPage() }}</span>
+
+                    @if ($properties->hasMorePages())
+                        <a href="{{ $properties->nextPageUrl() }}" style="padding: 0.4rem 0.75rem; border-radius: 0.375rem; background: #111827; color: #ffffff; text-decoration: none; display: inline-block;">Next »</a>
+                    @else
+                        <span style="padding: 0.4rem 0.75rem; border-radius: 0.375rem; background: #f1f4f8; color: #ccc;">Next »</span>
+                    @endif
+                </div>
+            </div>
         </section>
     </div>
 </main>
