@@ -14,7 +14,7 @@ class PropertyController extends Controller
         // Only show 'available' properties to clients
         $query = Property::where('status', Property::STATUS_AVAILABLE)->with('branch');
 
-        // Smart Search Engine filtering
+        // Keyword search
         if ($request->filled('q')) {
             $searchTerm = $request->q;
             $query->where(function ($q) use ($searchTerm) {
@@ -24,23 +24,30 @@ class PropertyController extends Controller
             });
         }
 
+        // Location filter (with English → Dhivehi normalization)
         if ($request->filled('location')) {
-            // Normalize misspellings to match DB values
-            $location = str_replace('Hulhumale', 'Hulhumalé', $request->location);
-            $location = str_replace('Male', 'Malé', $location);
+            $location = match (strtolower(trim($request->location))) {
+                'male', 'malé', 'malè', 'maley', 'mahle', 'malé city' => 'Malé',
+                'hulhumale', 'hulhumalé', 'hulhumalè', 'hulhumalley', 'hulhumalay' => 'Hulhumalé',
+                'villingili', 'vilingili', 'viligili', 'villingilli', 'vilingilly' => 'Villingili',
+                default => $request->location,
+            };
             $query->where('location', 'like', "%{$location}%");
         }
 
+        // Bedrooms filter (minimum)
+        if ($request->filled('bedrooms')) {
+            $query->where('bedrooms', '>=', $request->bedrooms);
+        }
+        
+        // Max rent filter
         if ($request->filled('max_rent')) {
             $query->where('monthly_rent', '<=', $request->max_rent);
         }
 
-        if ($request->filled('bedrooms')) {
-            $query->where('bedrooms', '>=', $request->bedrooms);
-        }
-
+        // Property type filter (case-insensitive)
         if ($request->filled('property_type')) {
-            $query->where('property_type', strtolower($request->property_type));
+            $query->whereRaw('LOWER(property_type) = ?', [strtolower($request->property_type)]);
         }
 
         $properties = $query->latest()->paginate(12)->withQueryString();

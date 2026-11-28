@@ -1,16 +1,13 @@
-
 @extends('client.layouts.master')
 
 @section('title', 'Find Properties')
-
 @section('activeNav', 'properties')
 
 @push('styles')
 <style>
     /* Property search page */
     .search-panel,
-    .property-card,
-    .property-list-item {
+    .property-card {
         background: var(--hr-surface);
         border: 1px solid var(--hr-border);
         border-radius: 1rem;
@@ -61,15 +58,6 @@
         background-color: #e3cdb8;
     }
 
-    .property-list-image {
-        width: 100%;
-        height: 100%;
-        min-height: 160px;
-        object-fit: cover;
-        border-radius: 0.65rem;
-        background-color: #e3cdb8;
-    }
-
     .property-type {
         color: var(--hr-primary);
         font-size: 0.8rem;
@@ -108,22 +96,6 @@
         background-color: #46a773;
     }
 
-    .save-button {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 40px;
-        height: 40px;
-        border: 0;
-        border-radius: 50%;
-        background-color: #eee5da;
-        color: var(--hr-primary);
-    }
-
-    .save-button:hover {
-        background-color: var(--hr-accent);
-    }
-
     .property-divider {
         border-color: #eee5da;
         opacity: 1;
@@ -132,31 +104,6 @@
     .search-section {
         padding-top: 3rem;
         padding-bottom: 4rem;
-    }
-
-    .results-count {
-        color: #786b61;
-        font-size: 0.875rem;
-        font-weight: 700;
-    }
-
-    .pagination .page-link {
-        margin: 0 0.2rem;
-        border: 0;
-        border-radius: 0.5rem;
-        background-color: var(--hr-surface);
-        color: #65554b;
-        font-weight: 800;
-    }
-
-    .pagination .page-item.active .page-link {
-        background-color: var(--hr-primary-dark);
-        color: #fff;
-    }
-
-    .pagination .page-link:hover {
-        background-color: var(--hr-accent);
-        color: var(--hr-ink);
     }
 
     @media (max-width: 575.98px) {
@@ -168,10 +115,6 @@
         .property-image {
             height: 200px;
         }
-
-        .property-list-image {
-            height: 190px;
-        }
     }
 </style>
 @endpush
@@ -181,7 +124,7 @@
     {{-- Search and filters --}}
     <section class="container-xxl px-3 px-lg-4 pt-4 pt-lg-5">
         <form
-            action="{{ url('/client/properties') }}"
+            action="{{ route('client.properties.index') }}"
             method="GET"
             class="search-panel p-3 p-md-4"
         >
@@ -210,62 +153,28 @@
             {{-- Main filters --}}
             <div class="row g-3 align-items-end">
                 <div class="col-12 col-md-6 col-xl">
-                    <label for="location" class="filter-label">
-                        Location
-                    </label>
-
-                    <select
-                        id="location"
-                        name="location"
-                        class="form-select filter-control"
-                    >
+                    <label for="location" class="filter-label">Location</label>
+                    <select id="location" name="location" class="form-select filter-control">
                         <option value="">Any location</option>
-                        <option value="Hulhumale"
-                            @selected(request('location') === 'Hulhumale')>
-                            Hulhumalé
-                        </option>
-                        <option value="Male"
-                            @selected(request('location') === 'Male')>
-                            Malé
-                        </option>
-                        <option value="Villingili"
-                            @selected(request('location') === 'Villingili')>
-                            Villingili
-                        </option>
+                        <option value="Hulhumale" @selected(request('location') === 'Hulhumale')>Hulhumalé</option>
+                        <option value="Male" @selected(request('location') === 'Male')>Malé</option>
+                        <option value="Villingili" @selected(request('location') === 'Villingili')>Villingili</option>
                     </select>
                 </div>
 
                 <div class="col-12 col-md-6 col-xl">
-                    <label for="bedrooms" class="filter-label">
-                        Bedrooms
-                    </label>
-
-                    <select
-                        id="bedrooms"
-                        name="bedrooms"
-                        class="form-select filter-control"
-                    >
+                    <label for="bedrooms" class="filter-label">Bedrooms</label>
+                    <select id="bedrooms" name="bedrooms" class="form-select filter-control">
                         <option value="">Any</option>
-                        <option value="1"
-                            @selected(request('bedrooms') === '1')>
-                            1+
-                        </option>
-                        <option value="2"
-                            @selected(request('bedrooms', '2') === '2')>
-                            2+
-                        </option>
-                        <option value="3"
-                            @selected(request('bedrooms') === '3')>
-                            3+
-                        </option>
+                        <option value="1" @selected(request('bedrooms') === '1')>1+</option>
+                        <option value="2" @selected(request('bedrooms') === '2')>2+</option>
+                        <option value="3" @selected(request('bedrooms') === '3')>3+</option>
+                        <option value="4" @selected(request('bedrooms') === '4')>4+</option>
                     </select>
                 </div>
 
                 <div class="col-12 col-md-6 col-xl">
-                    <label for="max_rent" class="filter-label">
-                        Maximum monthly rent
-                    </label>
-
+                    <label for="max_rent" class="filter-label">Maximum monthly rent</label>
                     <div class="input-group">
                         <span class="input-group-text">MVR</span>
                         <input
@@ -276,7 +185,7 @@
                             min="0"
                             step="500"
                             placeholder="Any budget"
-                            value="{{ request('max_rent', '20000') }}"
+                            value="{{ request('max_rent') }}"
                         >
                     </div>
                 </div>
@@ -305,42 +214,14 @@
             <div class="collapse mt-3" id="advancedFilters">
                 <div class="row g-3 border-top pt-3">
                     <div class="col-12 col-md-6">
-                        <label for="property_type" class="filter-label">
-                            Property type
-                        </label>
-
-                        <select
-                            id="property_type"
-                            name="property_type"
-                            class="form-select filter-control"
-                        >
+                        <label for="property_type" class="filter-label">Property type</label>
+                        <select id="property_type" name="property_type" class="form-select filter-control">
                             <option value="">All types</option>
-                            <option value="Apartment"
-                                @selected(request('property_type') === 'Apartment')>
-                                Apartment
-                            </option>
-                            <option value="Studio"
-                                @selected(request('property_type') === 'Studio')>
-                                Studio
-                            </option>
-                        </select>
-                    </div>
-
-                    <div class="col-12 col-md-6">
-                        <label for="availability" class="filter-label">
-                            Availability
-                        </label>
-
-                        <select
-                            id="availability"
-                            name="availability"
-                            class="form-select filter-control"
-                        >
-                            <option value="">Any availability</option>
-                            <option value="available"
-                                @selected(request('availability') === 'available')>
-                                Available now
-                            </option>
+                            <option value="Apartment" @selected(request('property_type') === 'Apartment')>Apartment</option>
+                            <option value="Flat" @selected(request('property_type') === 'Flat')>Flat</option>
+                            <option value="Studio" @selected(request('property_type') === 'Studio')>Studio</option>
+                            <option value="House" @selected(request('property_type') === 'House')>House</option>
+                            <option value="Room" @selected(request('property_type') === 'Room')>Room</option>
                         </select>
                     </div>
                 </div>
@@ -349,7 +230,6 @@
     </section>
 
     <div class="container-xxl px-3 px-lg-4 search-section">
-        {{-- Recommended properties --}}
         <section aria-labelledby="recommended-heading" class="mb-5">
             <div class="d-flex flex-column flex-sm-row align-items-sm-end justify-content-between gap-2 mb-4">
                 <div>
@@ -409,209 +289,11 @@
             </div>
 
             {{-- Pagination --}}
-            <div class="mt-5 d-flex justify-content-center">
-                {{ $properties->links() }}
-            </div>
-        </section>
-
-        {{-- All available properties --}}
-        <section class="mt-5 mt-lg-5" aria-labelledby="all-properties-heading">
-            <div class="d-flex flex-column flex-sm-row
-                        align-items-sm-end justify-content-between gap-2 mb-4">
-                <div>
-                    <p class="eyebrow mb-2">Explore more</p>
-
-                    <h2 id="all-properties-heading" class="section-heading mb-0">
-                        All available properties
-                    </h2>
+            @if($properties->hasPages())
+                <div class="mt-5 d-flex justify-content-center">
+                    {{ $properties->links() }}
                 </div>
-
-                <span class="results-count">8 properties found</span>
-            </div>
-
-            <div class="d-flex flex-column gap-3">
-                {{-- Property 1 --}}
-                <article class="property-list-item p-3">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-12 col-sm-4 col-lg-3">
-                            <img
-                                src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
-                                alt="Ocean View Residence interior"
-                                class="property-list-image"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <div class="col-12 col-sm-8 col-lg">
-                            <h3 class="h5 fw-bold mb-2">Ocean View Residence</h3>
-
-                            <p class="property-location mb-3">
-                                <span aria-hidden="true">📍</span>
-                                Hulhumalé · Phase 2
-                            </p>
-
-                            <div class="d-flex flex-wrap gap-3 small fw-bold">
-                                <span>2 bedrooms</span>
-                                <span>
-                                    MVR 18,000
-                                    <span class="text-muted fw-normal">/ month</span>
-                                </span>
-                            </div>
-
-                            <p class="availability mt-3 mb-0">
-                                <span class="availability-dot"></span>
-                                Available now
-                            </p>
-                        </div>
-
-                        <div class="col-12 col-lg-auto">
-                            <div class="d-flex align-items-center justify-content-between gap-3">
-                                <button
-                                    type="button"
-                                    class="save-button"
-                                    aria-label="Save Ocean View Residence"
-                                >
-                                    <span aria-hidden="true">♡</span>
-                                </button>
-
-                                <a href="{{ url('/client/properties') }}"
-                                   class="btn btn-hr px-3 py-2">
-                                    View property
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                {{-- Property 2 --}}
-                <article class="property-list-item p-3">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-12 col-sm-4 col-lg-3">
-                            <img
-                                src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
-                                alt="Palm Court Apartment interior"
-                                class="property-list-image"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <div class="col-12 col-sm-8 col-lg">
-                            <h3 class="h5 fw-bold mb-2">Palm Court Apartment</h3>
-
-                            <p class="property-location mb-3">
-                                <span aria-hidden="true">📍</span>
-                                Hulhumalé · Phase 1
-                            </p>
-
-                            <div class="d-flex flex-wrap gap-3 small fw-bold">
-                                <span>3 bedrooms</span>
-                                <span>
-                                    MVR 19,500
-                                    <span class="text-muted fw-normal">/ month</span>
-                                </span>
-                            </div>
-
-                            <p class="availability mt-3 mb-0">
-                                <span class="availability-dot"></span>
-                                Available now
-                            </p>
-                        </div>
-
-                        <div class="col-12 col-lg-auto">
-                            <div class="d-flex align-items-center justify-content-between gap-3">
-                                <button
-                                    type="button"
-                                    class="save-button"
-                                    aria-label="Save Palm Court Apartment"
-                                >
-                                    <span aria-hidden="true">♡</span>
-                                </button>
-
-                                <a href="{{ url('/client/properties') }}"
-                                   class="btn btn-hr px-3 py-2">
-                                    View property
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-
-                {{-- Property 3 --}}
-                <article class="property-list-item p-3">
-                    <div class="row g-3 align-items-center">
-                        <div class="col-12 col-sm-4 col-lg-3">
-                            <img
-                                src="https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg"
-                                alt="Lagoon Residence interior"
-                                class="property-list-image"
-                                loading="lazy"
-                            >
-                        </div>
-
-                        <div class="col-12 col-sm-8 col-lg">
-                            <h3 class="h5 fw-bold mb-2">Lagoon Residence</h3>
-
-                            <p class="property-location mb-3">
-                                <span aria-hidden="true">📍</span>
-                                Malé · Maafannu
-                            </p>
-
-                            <div class="d-flex flex-wrap gap-3 small fw-bold">
-                                <span>2 bedrooms</span>
-                                <span>
-                                    MVR 16,000
-                                    <span class="text-muted fw-normal">/ month</span>
-                                </span>
-                            </div>
-
-                            <p class="availability mt-3 mb-0">
-                                <span class="availability-dot"></span>
-                                Available Mar 12
-                            </p>
-                        </div>
-
-                        <div class="col-12 col-lg-auto">
-                            <div class="d-flex align-items-center justify-content-between gap-3">
-                                <button
-                                    type="button"
-                                    class="save-button"
-                                    aria-label="Save Lagoon Residence"
-                                >
-                                    <span aria-hidden="true">♡</span>
-                                </button>
-
-                                <a href="{{ url('/client/properties') }}"
-                                   class="btn btn-hr px-3 py-2">
-                                    View property
-                                </a>
-                            </div>
-                        </div>
-                    </div>
-                </article>
-            </div>
-
-            {{-- Pagination placeholder --}}
-            <nav class="mt-4" aria-label="Property pages">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item active" aria-current="page">
-                        <a class="page-link" href="?page=1">1</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page=2">2</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page=3">3</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page=4">4</a>
-                    </li>
-                    <li class="page-item">
-                        <a class="page-link" href="?page=2" aria-label="Next page">
-                            &rsaquo;
-                        </a>
-                    </li>
-                </ul>
-            </nav>
+            @endif
         </section>
     </div>
 </main>
